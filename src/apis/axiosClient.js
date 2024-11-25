@@ -1,7 +1,7 @@
 import axios from 'axios';
 
 const axiosClient = axios.create({
-  baseURL: "https://charming-ball-a6ef7b258d.strapiapp.com",
+  baseURL: "https://prepared-breeze-81c4a8dee5.strapiapp.com",
   headers: {
     'Content-Type': 'application/json',
   },

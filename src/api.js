@@ -1,6 +1,6 @@
 import axios from "axios";
 
-const baseURL = `https://charming-ball-a6ef7b258d.strapiapp.com/admin/content-manager/collection-types`;
+const baseURL = `https://prepared-breeze-81c4a8dee5.strapiapp.com/admin/content-manager/collection-types`;
 
 const JWT = () => {
     return localStorage.getItem("token");
