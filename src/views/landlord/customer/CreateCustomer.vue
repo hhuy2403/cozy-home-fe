@@ -183,7 +183,7 @@
         <!-- Members Tab -->
         <div v-show="activeTab == 'members'" class="tab-pane fade show active">
           <div class="mb-3">
-            <button v-if="!isViewOnly" class="btn btn-primary" @click="addMember">
+            <button v-if="!isViewOnly" class="btn btn-primary mb-3" @click.prevent="addMember">
               <i class="fa fa-plus"></i> Thêm thành viên
             </button>
           </div>
@@ -350,77 +350,77 @@ export default {
   },
 
   async mounted() {
-  try {
-    // Get query parameters
-    this.roomId = this.$route.query.roomId;
-    this.houseId = this.$route.query.houseId;
-    this.isViewOnly = this.$route.query.viewOnly == 'true';
-    this.isEditMode = this.$route.query.editMode == 'true';
+    try {
+      // Get query parameters
+      this.roomId = this.$route.query.roomId;
+      this.houseId = this.$route.query.houseId;
+      this.isViewOnly = this.$route.query.viewOnly == 'true';
+      this.isEditMode = this.$route.query.editMode == 'true';
 
-    // Get current landlord from localStorage
-    const currentUser = JSON.parse(localStorage.getItem('currentUser'));
-    if (!currentUser?.id || currentUser.role !== 'landlord') {
-      throw new Error('Không tìm thấy thông tin chủ trọ!');
+      // Get current landlord from localStorage
+      const currentUser = JSON.parse(localStorage.getItem('currentUser'));
+      if (!currentUser?.id || currentUser.role !== 'landlord') {
+        throw new Error('Không tìm thấy thông tin chủ trọ!');
+      }
+
+      if (!this.roomId || !this.houseId) {
+        throw new Error('Thiếu thông tin phòng hoặc nhà!');
+      }
+
+      // Fetch room and home data
+      const [roomResponse, homeResponse] = await Promise.all([
+        crudApi.read('api::room.room', { id: this.roomId }),
+        crudApi.read('api::home.home', { id: this.houseId }),
+      ]);
+
+      const roomData = roomResponse.data[0];
+      const homeData = homeResponse.data[0];
+
+      // Set room details
+      this.customer.roomNumber = roomData.roomNumber;
+      this.customer.rentalCost = roomData.price || homeData.price || 0;
+
+      // Fetch services for current landlord
+      const servicesResponse = await crudApi.read('api::service.service', { landlordId: { id: currentUser.id } });
+      if (servicesResponse.error) {
+        throw new Error('Không thể tải danh sách dịch vụ!');
+      }
+      const servicesData = servicesResponse.data;
+
+      this.services = servicesData.map(service => ({
+        ...service,
+        selected: false,
+        quantity: 1
+      }));
+
+      // If editing or viewing, fetch customer data
+      if (this.isEditMode || this.isViewOnly) {
+        await this.fetchCustomerData();
+      }
+
+      // Initialize contract end date
+      this.updateEndDate();
+
+    } catch (error) {
+      Swal.fire({
+        icon: 'error',
+        title: 'Lỗi!',
+        text: error.message || 'Không thể tải dữ liệu!'
+      });
+      this.goBack();
     }
-
-    if (!this.roomId || !this.houseId) {
-      throw new Error('Thiếu thông tin phòng hoặc nhà!');
-    }
-
-    // Fetch room and home data
-    const [roomResponse, homeResponse] = await Promise.all([
-      crudApi.read('api::room.room', {id: this.roomId}),
-      crudApi.read('api::home.home', {id: this.houseId}),
-    ]);
-
-    const roomData = roomResponse.data[0];
-    const homeData = homeResponse.data[0];
-
-    // Set room details
-    this.customer.roomNumber = roomData.roomNumber;
-    this.customer.rentalCost = roomData.price || homeData.price || 0;
-
-    // Fetch services for current landlord
-    const servicesResponse = await crudApi.read('api::service.service', {landlordId: {id: currentUser.id}});
-    if (servicesResponse.error) {
-      throw new Error('Không thể tải danh sách dịch vụ!');
-    }
-    const servicesData = servicesResponse.data;
-
-    this.services = servicesData.map(service => ({
-      ...service,
-      selected: false,
-      quantity: 1
-    }));
-
-    // If editing or viewing, fetch customer data
-    if (this.isEditMode || this.isViewOnly) {
-      await this.fetchCustomerData();
-    }
-
-    // Initialize contract end date
-    this.updateEndDate();
-
-  } catch (error) {
-    Swal.fire({
-      icon: 'error',
-      title: 'Lỗi!',
-      text: error.message || 'Không thể tải dữ liệu!'
-    });
-    this.goBack();
-  }
-},
+  },
 
   methods: {
     async updateRentalCost() {
       try {
 
-        const roomResponse = await crudApi.read('api::room.room', {id: this.roomId});
+        const roomResponse = await crudApi.read('api::room.room', { id: this.roomId });
         const roomData = roomResponse.data[0];
 
-        const homeResponse = crudApi.read('api::home.home', {id: this.houseId});
+        const homeResponse = crudApi.read('api::home.home', { id: this.houseId });
         const homeData = homeResponse.data[0];
-        
+
 
         this.customer.rentalCost = roomData.price || homeData.price || 0;
       } catch (error) {
@@ -435,7 +435,7 @@ export default {
 
     async fetchCustomerData() {
       try {
-        const response = await crudApi.read('api::customer.customer', {rooms: {id: this.roomId}});
+        const response = await crudApi.read('api::customer.customer', { rooms: { id: this.roomId } });
         const customers = response.data;
 
         if (customers.length > 0) {
@@ -508,19 +508,20 @@ export default {
 
     addMember() {
       this.members.push({
-        fullName: '',
-        birthDate: '',
-        gender: 'Nam',
-        identityCard: '',
-        address: '',
-        phoneNumber: '',
-        licensePlate: ''
+        fullName: '', // Họ tên
+        birthDate: '', // Ngày sinh
+        gender: 'Nam', // Giới tính mặc định
+        identityCard: '', // CMND/CCCD
+        address: '', // Địa chỉ
+        phoneNumber: '', // Điện thoại
+        licensePlate: '' // Biển số xe
       });
     },
 
     removeMember(index) {
-      this.members.splice(index, 1);
+      this.members.splice(index, 1); // Xóa thành viên tại vị trí chỉ định
     },
+
 
     updateEndDate() {
       if (this.contract.contractDate && this.contract.contractDuration) {
@@ -600,8 +601,8 @@ export default {
 
         // 3. Fetch current room and home data
         const [roomResponse, homeResponse] = await Promise.all([
-          crudApi.read('api::room.room', {id: this.roomId}),
-          crudApi.read('api::home.home', {id: this.houseId}),
+          crudApi.read('api::room.room', { id: this.roomId }),
+          crudApi.read('api::home.home', { id: this.houseId }),
         ]);
 
         const roomData = roomResponse.data[0];
@@ -660,7 +661,7 @@ export default {
         };
 
         const customerResponse = this.isEditMode
-          ? await crudApi.update('api::customer.customer', {id: this.customer.id}, customerData)
+          ? await crudApi.update('api::customer.customer', { id: this.customer.id }, customerData)
           : await crudApi.create('api::customer.customer', customerData);
 
         if (customerResponse.error) {
@@ -668,11 +669,11 @@ export default {
         }
 
         // 6. Update room status
-        const roomUpdateResponse = await crudApi.update('api::room.room', {id: this.roomId}, {
-              isRented: true,
-              isPaid: false,
-              lastUpdated: new Date().toISOString()
-            });
+        const roomUpdateResponse = await crudApi.update('api::room.room', { id: this.roomId }, {
+          isRented: true,
+          isPaid: false,
+          lastUpdated: new Date().toISOString()
+        });
 
         if (roomUpdateResponse.error) {
           throw new Error('Không thể cập nhật trạng thái phòng!');
