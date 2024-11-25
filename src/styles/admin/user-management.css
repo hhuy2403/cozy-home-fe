@@ -1,0 +1,212 @@
+.admin-user-management {
+    height: 100vh;
+    margin-top: 80px;
+    padding: 20px 20px;
+    background-color: #f8f9fa;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+
+h1 {
+    font-size: 2.5rem;
+    font-weight: bold;
+    color: #2a3f54;
+    margin-bottom: 30px;
+    text-align: center;
+}
+
+.search-input {
+    border: 2px solid #2a3f54;
+    border-radius: 4px;
+    padding: 12px 20px;
+    font-size: 1rem;
+    width: 100%;
+    max-width: 600px;
+    margin: 0 auto;
+}
+
+.search-input:focus {
+    border-color: #ff9800;
+    box-shadow: 0 0 5px rgba(255, 152, 0, 0.5);
+}
+
+.table {
+    margin-bottom: 30px;
+    background-color: #fff;
+    border-radius: 8px;
+    overflow: hidden;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+.table th {
+    background-color: #2a3f54;
+    color: #ffffff;
+    cursor: pointer;
+    padding: 15px;
+    text-align: center;
+}
+
+.table th:hover {
+    background-color: #ff9800;
+}
+
+.table td {
+    text-align: center;
+    padding: 15px;
+    vertical-align: middle;
+}
+
+.table-hover tbody tr:hover {
+    background-color: #f1f1f1;
+}
+
+.table td select {
+    border: none;
+    background-color: transparent;
+    font-size: 1rem;
+    color: #2a3f54;
+}
+
+.table td select:focus {
+    outline: none;
+}
+
+.btn {
+    padding: 10px 20px;
+    font-size: 0.95rem;
+    font-weight: bold;
+    border-radius: 5px;
+    transition: all 0.3s ease;
+    margin: 5px;
+}
+
+.btn-primary {
+    background-color: #2a3f54;
+    border-color: #2a3f54;
+}
+
+.btn-primary:hover {
+    background-color: #ff9800;
+    border-color: #ff9800;
+}
+
+.btn-danger {
+    background-color: #dc3545;
+    border-color: #dc3545;
+}
+
+.btn-danger:hover {
+    background-color: #c82333;
+}
+
+.btn-success {
+    background-color: #28a745;
+    border-color: #28a745;
+}
+
+.btn-success:hover {
+    background-color: #218838;
+}
+
+.btn-warning {
+    background-color: #ffc107;
+    border-color: #ffc107;
+}
+
+.btn-warning:hover {
+    background-color: #e0a800;
+}
+
+.btn-close {
+    background-color: transparent;
+    border: none;
+    font-size: 1.2rem;
+}
+
+.pagination {
+    margin-top: 30px;
+}
+
+.page-link {
+    color: #2a3f54;
+}
+
+.page-item.active .page-link {
+    background-color: #ff9800;
+    border-color: #ff9800;
+    color: white;
+}
+
+.modal-content {
+    border-radius: 10px;
+}
+
+.modal-header {
+    background-color: #2a3f54;
+    color: #ffffff;
+}
+
+.modal-title {
+    font-weight: bold;
+}
+
+.modal-body input,
+.modal-body select {
+    border-radius: 4px;
+    padding: 12px;
+    width: 100%;
+    border: 2px solid #2a3f54;
+    margin-bottom: 15px;
+}
+
+.modal-body input:focus,
+.modal-body select:focus {
+    border-color: #ff9800;
+    box-shadow: 0 0 5px rgba(255, 152, 0, 0.5);
+}
+
+.btn-close {
+    color: white;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+    .table th, .table td {
+        font-size: 0.85rem;
+        padding: 12px;
+    }
+
+    .btn {
+        padding: 8px 16px;
+        font-size: 0.85rem;
+    }
+
+    .search-input {
+        width: 100%;
+        padding: 10px;
+    }
+
+    .pagination {
+        margin-top: 20px;
+    }
+
+    h1 {
+        font-size: 2rem;
+    }
+}
+
+@media (max-width: 576px) {
+    .table {
+        font-size: 0.8rem;
+    }
+
+    .btn {
+        padding: 6px 12px;
+        font-size: 0.75rem;
+    }
+
+    .search-input {
+        padding: 8px 12px;
+    }
+}

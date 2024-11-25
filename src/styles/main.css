@@ -1,0 +1,465 @@
+/* main.css */
+
+/* Tông màu chính */
+:root {
+    --primary-color: #2a3f54;
+    --accent-color: #ff9800;
+    --white-color: #fff;
+    --background-blur: rgba(255, 255, 255, 0.1);
+}
+
+/* Body Setup */
+body {
+    font-family: 'Poppins', sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: var(--primary-color); /* Màu nền chính */
+    color: var(--white-color);
+    overflow-x: hidden;
+}
+
+/* Glassmorphism Effect */
+.glass {
+    backdrop-filter: blur(10px);
+    background: var(--background-blur);
+    box-shadow: 0 8px 32px rgba(31, 38, 135, 0.37); /* Shadow kết hợp với hiệu ứng blur */
+    border-radius: 10px;
+    border: 1px solid rgba(255, 255, 255, 0.18);
+}
+
+/* Header */
+.cozyhome-header {
+    position: relative;
+    height: 100vh;
+    background: linear-gradient(135deg, var(--primary-color), #1f2c40);
+    color: var(--white-color);
+    overflow: hidden;
+}
+
+.header-video {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    opacity: 0.4;
+}
+
+.cozyhome-header-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background: rgba(0, 0, 0, 0.6); /* Overlay làm mờ */
+}
+
+.cozyhome-header-content {
+    text-align: center;
+    padding: 20px;
+    max-width: 800px;
+    z-index: 2;
+    color: var(--white-color);
+}
+
+.cozyhome-header-title {
+    font-size: 4rem;
+    letter-spacing: 3px;
+    font-weight: bold;
+    text-transform: uppercase;
+    background: linear-gradient(135deg, var(--white-color), var(--accent-color));
+    -webkit-background-clip: text;
+    color: transparent;
+    animation: fadeIn 2s ease-in-out;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+
+.cozyhome-header-buttons {
+    margin-top: 40px;
+}
+
+.cozyhome-btn {
+    padding: 14px 40px;
+    margin: 12px;
+    border: none;
+    cursor: pointer;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    font-size: 1.3rem;
+    border-radius: 12px;
+}
+
+.cozyhome-btn-primary {
+    background: linear-gradient(45deg, var(--accent-color), var(--primary-color));
+    color: var(--white-color);
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.15);
+}
+
+.cozyhome-btn-primary:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.25);
+}
+
+.cozyhome-btn-secondary {
+    background-color: transparent;
+    color: var(--white-color);
+    border: 2px solid var(--white-color);
+    transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+.cozyhome-btn-secondary:hover {
+    background-color: var(--white-color);
+    color: var(--primary-color);
+}
+
+.cozyhome-header-links{
+    margin-top: 20px;
+}
+
+.header-link {
+    color: var(--white-color);
+    margin: 0 15px;
+    text-decoration: none;
+    font-size: 1.3rem;
+    border-bottom: 2px solid transparent;
+    transition: color 0.3s ease, border-bottom 0.3s ease;
+}
+
+.header-link:hover {
+    color: var(--accent-color);
+    border-bottom: 2px solid var(--accent-color);
+}
+
+/* Main Content */
+.cozyhome-main {
+    padding: 30px 20px;
+    margin-bottom: -50px;
+    background-color: #f9f9f9;
+    animation: fadeInUp 1.5s ease-in-out;
+}
+
+@keyframes fadeInUp {
+    from { opacity: 0; transform: translateY(50px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+.cozyhome-about-title,
+.cozyhome-pricing-title,
+.cozyhome-features-title {
+    text-align: center;
+    margin-bottom: 40px;
+    font-size: 2.8rem;
+    color: var(--primary-color);
+    text-transform: uppercase;
+    letter-spacing: 2px;
+}
+
+.cozyhome-about-content,
+.cozyhome-pricing-cards,
+.cozyhome-feature-list {
+    display: flex;
+    justify-content: space-around;
+    align-items: flex-start;
+    flex-wrap: wrap;
+    margin: 40px 0;
+}
+
+.cozyhome-about-text,
+.cozyhome-about-image,
+.cozyhome-pricing-card,
+.cozyhome-feature-item {
+    width: 40%;
+    margin-bottom: 40px;
+    border-radius: 12px;
+}
+
+.cozyhome-about-content{
+    display: flex;
+    align-items: center;
+}
+
+.cozyhome-about-text{
+    text-align: left;
+}
+
+.cozyhome-pricing-card img{
+    width: 100%;
+    height: auto;
+    border-radius: 10px;
+    margin-bottom: 15px;
+    object-fit: cover;
+}
+
+
+.cozyhome-feature-item img{
+    width: 100%;
+    height: auto;
+    border-radius: 10px;
+    margin-bottom: 15px;
+    object-fit: cover;
+}
+
+.cozyhome-about-image img{
+    width: 100%;
+    height: auto;
+    border-radius: 10px;
+    object-fit: cover;
+}
+
+
+ul {
+    list-style-type: none;
+    padding: 0;
+    margin: 0;
+}
+
+img{
+    max-width: 100%;
+    height: 200px;
+    border-radius: 5%;
+}
+
+.cozyhome-pricing-card,
+.cozyhome-feature-item {
+    background: var(--white-color);
+    padding: 30px;
+    border-radius: 15px;
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
+    text-align: center;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.cozyhome-pricing-card:hover,
+.cozyhome-feature-item:hover {
+    transform: translateY(-10px);
+    box-shadow: 0 15px 30px rgba(0, 0, 0, 0.25);
+}
+
+.cozyhome-pricing-card,
+.cozyhome-feature-item ul li{
+    list-style-type: none;
+}
+
+.cozyhome-feature-icon {
+    font-size: 3.5rem;
+    margin-bottom: 20px;
+    color: var(--primary-color);
+}
+
+.cozyhome-pricing-price {
+    font-size: 1.8rem;
+    margin: 20px 0;
+    font-weight: bold;
+    color: var(--primary-color);
+}
+
+.cozyhome-btn-primary,
+.cozyhome-btn-secondary {
+    width: 90%;
+    padding: 15px;
+}
+
+/* Footer Styles */
+.cozyhome-footer {
+    background: linear-gradient(135deg, rgba(42, 63, 84, 0.9), rgba(31, 44, 64, 0.8));
+    color: white;
+    padding: 60px 30px;
+    position: relative;
+    z-index: 1;
+}
+
+.glass {
+    border-radius: 0;
+    backdrop-filter: blur(8px);
+    background: #fff;
+    box-shadow: 0 8px 32px rgba(31, 38, 135, 0.37);
+    border: 1px solid rgba(255, 255, 255, 0.18);
+}
+
+.cozyhome-footer-content {
+    max-width: 1200px;
+    margin: 0 auto;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+}
+
+.cozyhome-footer-columns {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+}
+
+.cozyhome-footer-column {
+    width: 30%;
+    margin-bottom: 30px;
+}
+
+.cozyhome-footer h3 {
+    font-size: 1.8rem;
+    font-weight: bold;
+    margin-bottom: 20px;
+    color: var(--primary-color);
+
+}
+
+.cozyhome-footer p {
+    font-size: 1.1rem;
+    line-height: 1.6;
+    margin-bottom: 10px;
+    color: var(--primary-color);
+}
+
+.cozyhome-footer-links {
+    list-style-type: none;
+    padding: 0;
+}
+
+.cozyhome-footer-links li {
+    margin-bottom: 12px;
+}
+
+.cozyhome-footer-links li a {
+    color: var(--primary-color);
+    text-decoration: none;
+    font-size: 1.2rem;
+    transition: color 0.3s ease, text-shadow 0.3s ease;
+}
+
+.cozyhome-footer-links li a:hover {
+    color: var(--accent-color);
+    text-decoration: underline;
+
+}
+
+/* Social Media Icons */
+
+.cozyhome-footer-social-icons a {
+    text-decoration: none;
+    margin: 0 10px;
+    color: var(--primary-color);
+    font-size: 1.8rem;
+    transition: color 0.3s ease, transform 0.3s ease;
+}
+
+.cozyhome-footer-social-icons a:hover {
+    color: #ff9800;
+    transform: scale(1.2); /* Phóng to khi hover */
+}
+
+/* Media Queries */
+@media (max-width: 768px) {
+    .cozyhome-header-title {
+        font-size: 3rem;
+    }
+
+    .cozyhome-about-content,
+    .cozyhome-pricing-cards,
+    .cozyhome-feature-list {
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .cozyhome-about-text,
+    .cozyhome-about-image,
+    .cozyhome-pricing-card,
+    .cozyhome-feature-item {
+        width: 90%;
+    }
+
+    .cozyhome-footer-column {
+        width: 100%;
+    }
+}
+
+@media (max-width: 480px) {
+    .cozyhome-header-title {
+        font-size: 2.5rem;
+    }
+
+    .cozyhome-btn {
+        padding: 10px 20px;
+        font-size: 1rem;
+    }
+
+    .cozyhome-header-buttons {
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .cozyhome-header-links {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        flex-direction: column;
+        margin-top: 40px;
+    }
+
+    .cozyhome-header-links .header-link{
+        margin-bottom: 10px;
+        font-size: 1rem;
+    }
+
+    .cozyhome-about-content,
+    .cozyhome-pricing-cards,
+    .cozyhome-feature-list {
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .cozyhome-about-text,
+    .cozyhome-about-image,
+    .cozyhome-pricing-card,
+    .cozyhome-feature-item {
+        width: 82%;
+        margin-bottom: 20px;
+    }
+
+
+    .cozyhome-footer-column {
+        width: 100%;
+        margin-bottom: 20px;
+        text-align: center;
+    }
+
+    .cozyhome-footer-social-icons {
+        display: flex;
+        justify-content: center;
+        margin-top: 20px;
+    }
+
+    .cozyhome-footer-social-icons a {
+        margin: 0 5px;
+        font-size: 1.5rem;
+    }
+
+
+    .cozyhome-footer-links li a {
+        font-size: 1.1rem;
+    }
+
+
+    .cozyhome-main {
+        padding: 30px 10px;
+    }
+
+
+    .cozyhome-about-title,
+    .cozyhome-pricing-title,
+    .cozyhome-features-title {
+        font-size: 2rem;
+        margin-bottom: 15px;
+    }
+}

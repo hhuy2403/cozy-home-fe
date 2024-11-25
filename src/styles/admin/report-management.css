@@ -1,0 +1,47 @@
+.analytics-reporting {
+    height: 100vh;
+    margin-top: 80px;
+    padding: 20px;
+}
+
+.card {
+    padding: 15px;
+    border-radius: 10px;
+}
+
+.card-title {
+    font-size: 1.3rem;
+    margin-bottom: 15px;
+}
+
+.card-text {
+    font-size: 1rem;
+}
+
+.shadow-sm {
+    box-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.075);
+}
+
+.row {
+    display: flex;
+    flex-wrap: wrap;
+}
+
+.col-lg-6, .col-md-12 {
+    display: flex;
+    justify-content: center;
+}
+
+.mb-4 {
+    margin-bottom: 20px;
+}
+
+@media (max-width: 768px) {
+    .card-title {
+        font-size: 1.1rem;
+    }
+
+    .card-text {
+        font-size: 0.95rem;
+    }
+}
