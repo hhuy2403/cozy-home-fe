@@ -4,32 +4,20 @@
     <div class="login-container">
       <div class="login-box">
         <h2 class="login-title">Đăng Nhập</h2>
-        
+
         <!-- Login Form -->
         <form @submit.prevent="login">
           <label for="email" class="form-label">Email</label>
           <div class="mb-3">
-            <input
-              v-model="email"
-              id="email"
-              type="email"
-              class="form-control"
-              placeholder="Nhập email"
-              @blur="validateEmail"
-            />
+            <input v-model="email" id="email" type="email" class="form-control" placeholder="Nhập email"
+              @blur="validateEmail" />
           </div>
           <small v-if="emailError" class="text-danger">{{ emailError }}</small>
 
           <label for="password" class="form-label">Mật khẩu</label>
           <div class="mb-3 password-wrapper">
-            <input
-              v-model="password"
-              :type="showPassword ? 'text' : 'password'"
-              id="password"
-              placeholder="Nhập mật khẩu"
-              class="login-input form-control"
-              @blur="validatePassword"
-            />
+            <input v-model="password" :type="showPassword ? 'text' : 'password'" id="password"
+              placeholder="Nhập mật khẩu" class="login-input form-control" @blur="validatePassword" />
             <button type="button" @click="togglePassword" class="toggle-password-btn">
               <i :class="showPassword ? 'fas fa-eye-slash' : 'fas fa-eye'"></i>
             </button>
@@ -81,13 +69,17 @@ export default {
     };
   },
 
-  
+
 
   created() {
     localStorage.removeItem('currentUser');
     localStorage.removeItem('userRole');
     localStorage.removeItem('token');
   },
+  mounted() {
+    this.watchInput();
+  },
+
 
   // mounted() {
   //   // Check if user is already logged in
@@ -103,48 +95,94 @@ export default {
     },
     validateEmail() {
       if (!this.email) {
-        this.emailError = 'Email không được để trống.';
+        this.emailError = 'Email không được để trống';
         return false;
       }
-      const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+      this.email = this.email.trim();
+
+      const emailPattern = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
       if (!emailPattern.test(this.email)) {
-        this.emailError = 'Địa chỉ email không hợp lệ.';
+        this.emailError = 'Email không hợp lệ';
         return false;
       }
+
+      if (this.email.length > 255) {
+        this.emailError = 'Email không được vượt quá 255 ký tự';
+        return false;
+      }
+
       this.emailError = '';
       return true;
     },
+
     validatePassword() {
       if (!this.password) {
-        this.passwordError = 'Mật khẩu không được để trống.';
+        this.passwordError = 'Mật khẩu không được để trống';
         return false;
       }
+
       if (this.password.length < 6) {
-        this.passwordError = 'Mật khẩu phải có ít nhất 6 ký tự.';
+        this.passwordError = 'Mật khẩu phải có ít nhất 6 ký tự';
         return false;
       }
+
+      if (this.password.length > 50) {
+        this.passwordError = 'Mật khẩu không được vượt quá 50 ký tự';
+        return false;
+      }
+
+      // Check for at least 1 uppercase, 1 lowercase, 1 number
+      const passwordPattern = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d).+$/;
+      if (!passwordPattern.test(this.password)) {
+        this.passwordError = 'Mật khẩu phải chứa ít nhất 1 chữ hoa, 1 chữ thường và 1 số';
+        return false;
+      }
+
+      // Check for special characters
+      const specialChars = /[!@#$%^&*(),.?":{}|<>]/;
+      if (!specialChars.test(this.password)) {
+        this.passwordError = 'Mật khẩu phải chứa ít nhất 1 ký tự đặc biệt';
+        return false;
+      }
+
       this.passwordError = '';
       return true;
     },
+
     validateForm() {
-      return this.validateEmail() && this.validatePassword();
+      const isEmailValid = this.validateEmail();
+      const isPasswordValid = this.validatePassword();
+
+      // Clear previous error message
+      this.error = '';
+
+      return isEmailValid && isPasswordValid;
     },
+
     async login() {
       if (!this.validateForm()) return;
-      this.isLoading = true; // Start loading
+      this.isLoading = true;
 
       try {
-        const response  = await authApi.login({
+        const response = await authApi.login({
           identifier: this.email,
           password: this.password,
         });
 
-        if(response.error) {
-          this.error = response.error;
-          this.isLoading = false; // Stop loading
+        if (response.error) {
+          // Handle specific error messages from backend
+          if (response.error.message === 'Invalid identifier or password') {
+            this.error = 'Email hoặc mật khẩu không chính xác';
+          } else if (response.error.message === 'User not found') {
+            this.error = 'Email này chưa được đăng ký';
+          } else {
+            this.error = 'Đăng nhập thất bại. Vui lòng kiểm tra lại thông tin đăng nhập.';
+          }
+          this.isLoading = false;
           return;
         }
-        
+
         const user = response.user; // MockAPI returns an array, so get the first element
         user.role = user.customRole;
         user.status = user.customStatus;
@@ -175,17 +213,32 @@ export default {
             break;
         }
       } catch (error) {
-        this.error = 'Đăng nhập thất bại. Vui lòng thử lại.';
+        if (error.response?.status === 400) {
+          this.error = 'Email hoặc mật khẩu không chính xác';
+        } else if (error.response?.status === 404) {
+          this.error = 'Email này chưa được đăng ký';
+        } else {
+          this.error = 'Đăng nhập thất bại. Vui lòng kiểm tra lại thông tin đăng nhập.';
+        }
       } finally {
-        this.isLoading = false; // Stop loading when request finishes
+        this.isLoading = false; 
       }
+    },
+    watchInput() {
+      this.$watch('email', () => {
+        if (this.email) this.validateEmail();
+      });
+
+      this.$watch('password', () => {
+        if (this.password) this.validatePassword();
+      });
     }
+
   },
 };
 </script>
 
 <style scoped>
-
 .login-container {
   display: flex;
   align-items: center;
