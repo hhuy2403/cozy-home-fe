@@ -216,15 +216,11 @@ export default {
           throw new Error('Không tìm thấy thông tin người dùng!');
         }
 
-        const response = await crudApi.read('api::home.home', null);
-        if (!response.isSuccess) {
-          throw new Error('Error to fetch home');
-        }
+        const response = await crudApi.read('api::home.home', {landlordId: {id: this.currentUser.id}});
         const homes = response.data;
 
         // Lọc nhà theo landlordId
         this.houses = homes
-          .filter((home) => home.landlordId.id == this.currentUser.id)
           .map((home) => ({
             id: home.id,
             name: home.name,
@@ -237,17 +233,13 @@ export default {
 
     async fetchRooms() {
       try {
-        const response = await crudApi.read('api::room.room', null);
-        if (!response.isSuccess) {
-          throw new Error('Error to fetch room');
-        }
+        const landlordHouseIds = this.houses.map((h) => h.id);
+        const response = await crudApi.read('api::room.room', {houseId: {id: landlordHouseIds}});
 
-        const allRooms = await response.data;
+        const allRooms = response.data;
 
         // Lọc phòng theo houses của landlord
-        const landlordHouseIds = this.houses.map((h) => h.id);
         this.rooms = allRooms
-          .filter((room) => landlordHouseIds.includes(room.houseId.id))
           .map((room) => ({
             id: room.id,
             roomNumber: room.roomNumber,
@@ -261,7 +253,8 @@ export default {
 
     async fetchReport() {
       try {
-        const response = await crudApi.read('api::bill.bill');
+        const listRoomIds = this.rooms.map((r) => r.id);
+        const response = await crudApi.read('api::bill.bill', {roomId: listRoomIds});
         if (!response.isSuccess) {
           throw new Error('Fetch bill failed');
         }

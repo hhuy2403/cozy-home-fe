@@ -75,10 +75,9 @@
               :disabled="isLoading"
             >
               <i
-                class="fas"
-                :class="isLoading ? 'fa-spinner fa-spin' : 'fa-search'"
+                class="fas fa-search"
               ></i>
-              {{ isLoading ? 'Đang tải...' : 'Tìm kiếm' }}
+              Tìm kiếm
             </button>
           </div>
 
@@ -245,21 +244,15 @@ export default {
           throw new Error('Không tìm thấy thông tin người dùng!');
         }
 
-        // Fetch houses và rooms
-        const [housesResponse, roomsResponse] = await Promise.all([
-          crudApi.read('api::home.home', null),
-          crudApi.read('api::room.room', null),
-        ]);
-
-        if (!housesResponse.isSuccess || !roomsResponse.isSuccess) {
-          throw new Error('Failed to fetch data');
-        }
-
+        const housesResponse = await crudApi.read('api::home.home', {landlordId: {$eq: currentUser.id}});
         const allHouses = housesResponse.data.map((f) => ({
           ...f,
           landlordId: f.landlordId.id,
           landlord: f.landlordId,
         }));
+
+        const listHouseId = allHouses.map((house) => house.id);
+        const roomsResponse = await crudApi.read('api::room.room', {houseId: {id: listHouseId}});
         const allRooms = roomsResponse.data.map((f) => ({
           ...f,
           houseId: f.houseId.id,
@@ -267,15 +260,10 @@ export default {
         }));
 
         // Lọc houses theo landlordId
-        this.houses =
-          allHouses.filter((house) => house.landlordId == currentUser.id) ||
-          [];
+        this.houses = allHouses;
 
         // Lọc rooms theo houses của landlord
-        this.rooms =
-          allRooms.filter((room) =>
-            this.houses.some((house) => house.id == room.houseId)
-          ) || [];
+        this.rooms = allRooms;
 
         await this.fetchReport();
       } catch (error) {
@@ -298,7 +286,8 @@ export default {
         this.isLoading = true;
         this.members = []; // Reset về mảng rỗng
 
-        const customersResponse = await crudApi.read('api::customer.customer');
+        const listRoomId = this.rooms.map((room) => room.id);
+        const customersResponse = await crudApi.read('api::customer.customer', {roomId: listRoomId});
 
         if (!customersResponse.isSuccess) {
           throw new Error('Failed to fetch customers');
