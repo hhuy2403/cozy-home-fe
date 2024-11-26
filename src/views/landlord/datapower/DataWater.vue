@@ -88,7 +88,7 @@
             }">
               <td>{{ room.houseName }}</td>
               <td>{{ room.roomNumber }}</td>
-              <td>{{ room.customer?.fullName || 'Trống' }}</td>
+              <td>{{ room.customers?.[0]?.fullName || 'Trống' }}</td>
               <td>
                 <input type="number" class="form-control" v-model="room.oldWaterIndex"
                   :disabled="!room.isOldIndexEditable || room.isPaid" min="0" :max="MAX_INDEX"

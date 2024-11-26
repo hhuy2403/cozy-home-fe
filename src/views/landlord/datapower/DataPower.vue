@@ -88,7 +88,7 @@
             }">
               <td>{{ room.houseName }}</td>
               <td>{{ room.roomNumber }}</td>
-              <td>{{ room.customer?.fullName || 'Trống' }}</td>
+              <td>{{ room.customers?.[0]?.fullName || 'Trống' }}</td>
               <td>
                 <input type="number" class="form-control" v-model="room.oldElectricIndex"
                   :disabled="!room.isOldIndexEditable || room.isPaid" min="0" :max="MAX_INDEX"
@@ -327,8 +327,6 @@ export default {
       if(endpoint == "/rooms"){
         return await crudApi.read("api::room.room", {houseId: {id: {$in: params.houseId}}});
       }
-
-
       return {};
     },
     // API Methods
