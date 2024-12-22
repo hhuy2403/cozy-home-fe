@@ -192,10 +192,9 @@
 </template>
 
 <script>
-import axios from 'axios'
+// import axios from 'axios'
 import Swal from 'sweetalert2'
-
-const API_URL = 'https://6725a513c39fedae05b5670b.mockapi.io/api/v1'
+import crudApi from '@/apis/crudApi.js'
 
 export default {
   name: 'AdminDashboard',
@@ -285,10 +284,10 @@ export default {
       try {
         this.showLoading()
         const [users, debts, contracts, notifications] = await Promise.all([
-          axios.get(`${API_URL}/users`),
-          axios.get(`${API_URL}/debts`),
-          axios.get(`${API_URL}/contracts-admin`),
-          axios.get(`${API_URL}/notifications`)
+          crudApi.read("plugin::users-permissions.user"),
+          crudApi.read("api::debt.debt"),
+          crudApi.read("api::contract.contract"),
+          crudApi.read("api::notification.notification"),
         ])
 
         // Process users data

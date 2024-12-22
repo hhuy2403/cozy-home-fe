@@ -398,9 +398,9 @@
 
 <script>
 import Swal from "sweetalert2";
-import axios from "axios";
+// import axios from "axios";
+import crudApi from "@/apis/crudApi";
 
-const API_URL = "https://6725a513c39fedae05b5670b.mockapi.io/api/v1/notifications";
 
 export default {
   name: "AdminNotificationManagement",
@@ -507,7 +507,7 @@ export default {
       this.loading = true;
       this.error = null;
       try {
-        const response = await axios.get(API_URL);
+        const response = await crudApi.read("api::notification.notification");
         this.notifications = response.data.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
         this.filterNotifications();
       } catch (error) {
@@ -731,8 +731,7 @@ export default {
           createdAt: new Date().toISOString(),
           status: this.isScheduled ? 'scheduled' : 'draft'
         };
-
-        const response = await axios.post(API_URL, newNotification);
+        const response = await crudApi.create("api::notification.notification", newNotification);
         this.notifications.unshift(response.data);
         this.filterNotifications();
         this.closeModal();
@@ -759,7 +758,7 @@ export default {
           status: this.isScheduled ? 'scheduled' : 'draft'
         };
 
-        const response = await axios.put(`${API_URL}/${this.modalNotification.id}`, updatedNotification);
+        const response = await crudApi.update("api::notification.notification", {id: updatedNotification.id}, updatedNotification);
         const index = this.notifications.findIndex(n => n.id == this.modalNotification.id);
 
         if (index !== -1) {
@@ -809,7 +808,7 @@ export default {
 
     async deleteNotification(id) {
       try {
-        await axios.delete(`${API_URL}/${id}`);
+        await crudApi.delete("api::notification.notification", {id: id});
         this.notifications = this.notifications.filter(n => n.id !== id);
         this.filterNotifications();
 
@@ -832,7 +831,7 @@ export default {
       try {
         const notification = this.notifications.find(n => n.id == id);
         if (notification) {
-          await axios.put(`${API_URL}/${id}`, {
+          await crudApi.update("api::notification.notification", {id: id}, {
             ...notification,
             status: 'sent',
             sentAt: new Date().toISOString()

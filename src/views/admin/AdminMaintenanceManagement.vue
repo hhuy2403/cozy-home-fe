@@ -49,14 +49,20 @@
         <!-- Search Bar -->
         <div class="search-bar">
           <i class="fas fa-search"></i>
-          <input type="text" v-model="contractSearchQuery" placeholder="Tìm kiếm hợp đồng..." />
+          <input
+            type="text"
+            v-model="contractSearchQuery"
+            placeholder="Tìm kiếm hợp đồng..."
+          />
         </div>
 
         <!-- Contract Form -->
         <div v-if="isContractFormVisible" class="modal-overlay">
           <div class="modal-content">
             <div class="modal-header">
-              <h3>{{ isEditing ? 'Chỉnh Sửa Hợp Đồng' : 'Thêm Hợp Đồng Mới' }}</h3>
+              <h3>
+                {{ isEditing ? 'Chỉnh Sửa Hợp Đồng' : 'Thêm Hợp Đồng Mới' }}
+              </h3>
               <button class="btn-close" @click="closeContractForm">
                 <i class="fas fa-times"></i>
               </button>
@@ -81,15 +87,30 @@
               <div class="form-group">
                 <label>File hợp đồng:</label>
                 <div class="file-upload">
-                  <input type="file" ref="fileInput" @change="handleFileChange" accept=".pdf,.doc,.docx"
-                    class="file-input" />
-                  <button type="button" class="btn btn-outline" @click="triggerFileInput">
+                  <input
+                    type="file"
+                    ref="fileInput"
+                    @change="handleFileChange"
+                    accept=".pdf,.doc,.docx"
+                    class="file-input"
+                  />
+                  <button
+                    type="button"
+                    class="btn btn-outline"
+                    @click="triggerFileInput"
+                  >
                     <i class="fas fa-upload"></i> Chọn file
                   </button>
-                  <span class="file-name">{{ selectedFileName || 'Chưa chọn file' }}</span>
+                  <span class="file-name">{{
+                    selectedFileName || 'Chưa chọn file'
+                  }}</span>
                 </div>
                 <div v-if="contractForm.fileUrl" class="file-preview">
-                  <a :href="contractForm.fileUrl" target="_blank" class="file-link">
+                  <a
+                    :href="contractForm.fileUrl"
+                    target="_blank"
+                    class="file-link"
+                  >
                     <i class="fas fa-file-alt"></i> Xem file hiện tại
                   </a>
                 </div>
@@ -99,7 +120,11 @@
                   <i class="fas fa-save"></i>
                   {{ isEditing ? 'Cập Nhật' : 'Lưu' }}
                 </button>
-                <button type="button" class="btn btn-secondary" @click="closeContractForm">
+                <button
+                  type="button"
+                  class="btn btn-secondary"
+                  @click="closeContractForm"
+                >
                   Hủy
                 </button>
               </div>
@@ -124,21 +149,36 @@
               <tr v-if="filteredContracts.length == 0">
                 <td colspan="6" class="no-data">Không có dữ liệu</td>
               </tr>
-              <tr v-else v-for="(contract, index) in filteredContracts" :key="contract.id">
+              <tr
+                v-else
+                v-for="(contract, index) in filteredContracts"
+                :key="contract.id"
+              >
                 <td>{{ contract.partner }}</td>
                 <td>{{ contract.terms }}</td>
                 <td>{{ formatDate(contract.startDate) }}</td>
                 <td>{{ formatDate(contract.endDate) }}</td>
                 <td>
-                  <span class="status-badge" :class="getContractStatus(contract)">
+                  <span
+                    class="status-badge"
+                    :class="getContractStatus(contract)"
+                  >
                     {{ getContractStatusText(contract) }}
                   </span>
                 </td>
                 <td class="actions">
-                  <button class="btn btn-icon" @click="editContract(contract)" title="Sửa">
+                  <button
+                    class="btn btn-icon"
+                    @click="editContract(contract)"
+                    title="Sửa"
+                  >
                     <i class="fas fa-edit"></i>
                   </button>
-                  <button class="btn btn-icon danger" @click="deleteContract(contract.id, index)" title="Xóa">
+                  <button
+                    class="btn btn-icon danger"
+                    @click="deleteContract(contract.id, index)"
+                    title="Xóa"
+                  >
                     <i class="fas fa-trash"></i>
                   </button>
                 </td>
@@ -164,14 +204,24 @@
         <!-- Search Bar -->
         <div class="search-bar">
           <i class="fas fa-search"></i>
-          <input type="text" v-model="maintenanceSearchQuery" placeholder="Tìm kiếm lịch bảo trì..." />
+          <input
+            type="text"
+            v-model="maintenanceSearchQuery"
+            placeholder="Tìm kiếm lịch bảo trì..."
+          />
         </div>
 
         <!-- Maintenance Form -->
         <div v-if="isMaintenanceFormVisible" class="modal-overlay">
           <div class="modal-content">
             <div class="modal-header">
-              <h3>{{ isEditingMaintenance ? 'Chỉnh Sửa Lịch Bảo Trì' : 'Thêm Lịch Bảo Trì Mới' }}</h3>
+              <h3>
+                {{
+                  isEditingMaintenance
+                    ? 'Chỉnh Sửa Lịch Bảo Trì'
+                    : 'Thêm Lịch Bảo Trì Mới'
+                }}
+              </h3>
               <button class="btn-close" @click="hideCreateMaintenanceForm">
                 <i class="fas fa-times"></i>
               </button>
@@ -187,13 +237,21 @@
               </div>
               <div class="form-group">
                 <label>Chi tiết:</label>
-                <textarea v-model="maintenanceForm.details" rows="3" required></textarea>
+                <textarea
+                  v-model="maintenanceForm.details"
+                  rows="3"
+                  required
+                ></textarea>
               </div>
               <div class="form-group">
                 <label>Hợp đồng:</label>
                 <select v-model="maintenanceForm.contractId" required>
                   <option value="">Chọn hợp đồng</option>
-                  <option v-for="contract in contracts" :key="contract.id" :value="contract.id">
+                  <option
+                    v-for="contract in contracts"
+                    :key="contract.id"
+                    :value="contract.id"
+                  >
                     {{ contract.partner }}
                   </option>
                 </select>
@@ -203,7 +261,11 @@
                   <i class="fas fa-save"></i>
                   {{ isEditingMaintenance ? 'Cập Nhật' : 'Lưu' }}
                 </button>
-                <button type="button" class="btn btn-secondary" @click="hideCreateMaintenanceForm">
+                <button
+                  type="button"
+                  class="btn btn-secondary"
+                  @click="hideCreateMaintenanceForm"
+                >
                   Hủy
                 </button>
               </div>
@@ -224,19 +286,39 @@
               </tr>
             </thead>
             <tbody>
-              <tr v-if="filteredMaintenanceSchedules.length == 0">
+              <tr v-if="isLoading">
+                <td colspan="5" class="loading">
+                  <i class="fas fa-spinner fa-spin"></i>
+                  <span>Đang tải...</span>
+                </td>
+              </tr>
+              <tr v-else-if="!maintenanceSchedules.length">
                 <td colspan="5" class="no-data">Không có dữ liệu</td>
               </tr>
-              <tr v-else v-for="(schedule, index) in filteredMaintenanceSchedules" :key="schedule.id">
-                <td>{{ formatDate(schedule.date) }}</td>
-                <td>{{ schedule.type }}</td>
-                <td>{{ schedule.details }}</td>
-                <td>{{ getContractPartner(schedule.contractId) }}</td>
+              <tr
+                v-else
+                v-for="(schedule, index) in filteredMaintenanceSchedules"
+                :key="schedule?.id || index"
+              >
+                <td>
+                  {{ schedule?.date ? formatDate(schedule.date) : 'N/A' }}
+                </td>
+                <td>{{ schedule?.type || 'N/A' }}</td>
+                <td>{{ schedule?.details || 'N/A' }}</td>
+                <td>{{ getContractPartner(schedule?.contractId) }}</td>
                 <td class="actions">
-                  <button class="btn btn-icon" @click="editMaintenance(schedule)" title="Sửa">
+                  <button
+                    class="btn btn-icon"
+                    @click="editMaintenance(schedule)"
+                    title="Sửa"
+                  >
                     <i class="fas fa-edit"></i>
                   </button>
-                  <button class="btn btn-icon danger" @click="deleteMaintenance(schedule.id, index)" title="Xóa">
+                  <button
+                    class="btn btn-icon danger"
+                    @click="deleteMaintenance(schedule.id, index)"
+                    title="Xóa"
+                  >
                     <i class="fas fa-trash"></i>
                   </button>
                 </td>
@@ -254,28 +336,29 @@
 </template>
 
 <script setup>
-import { ref, computed, onMounted } from 'vue'
-import { format } from 'date-fns'
-import { vi } from 'date-fns/locale'
-import axios from 'axios'
-import Swal from 'sweetalert2'
+import { ref, computed, onMounted } from 'vue';
+import { format } from 'date-fns';
+import { vi } from 'date-fns/locale';
+import crudApi from '@/apis/crudApi.js';
+
+import axios from 'axios';
+import Swal from 'sweetalert2';
 
 // API Configuration
-const API_BASE_URL = 'https://6725a513c39fedae05b5670b.mockapi.io/api/v1'
 
 // State Management
-const contracts = ref([])
-const maintenanceSchedules = ref([])
-const isLoading = ref(false)
-const isContractFormVisible = ref(false)
-const isMaintenanceFormVisible = ref(false)
-const isEditing = ref(false)
-const isEditingMaintenance = ref(false)
-const contractSearchQuery = ref('')
-const maintenanceSearchQuery = ref('')
-const selectedFile = ref(null)
-const selectedFileName = ref('')
-const fileInput = ref(null)
+const contracts = ref([]);
+const maintenanceSchedules = ref([]);
+const isLoading = ref(false);
+const isContractFormVisible = ref(false);
+const isMaintenanceFormVisible = ref(false);
+const isEditing = ref(false);
+const isEditingMaintenance = ref(false);
+const contractSearchQuery = ref('');
+const maintenanceSearchQuery = ref('');
+const selectedFile = ref(null);
+const selectedFileName = ref('');
+const fileInput = ref(null);
 
 // Form States
 const contractForm = ref({
@@ -283,27 +366,32 @@ const contractForm = ref({
   terms: '',
   startDate: '',
   endDate: '',
-  fileUrl: ''
-})
+  fileUrl: '',
+});
 
 const maintenanceForm = ref({
   date: '',
   type: '',
   details: '',
-  contractId: ''
-})
+  contractId: '',
+});
 
 // Thêm các function xử lý file
-const CLOUDINARY_UPLOAD_URL = 'https://api.cloudinary.com/v1_1/djnt4wlng/upload'
-const CLOUDINARY_UPLOAD_PRESET = 'cozy-home'
+const CLOUDINARY_UPLOAD_URL =
+  'https://api.cloudinary.com/v1_1/djnt4wlng/upload';
+const CLOUDINARY_UPLOAD_PRESET = 'cozy-home';
 
 const triggerFileInput = () => {
-  fileInput.value.click()
-}
+  fileInput.value.click();
+};
 
 const validateFile = (file) => {
   const maxSize = 5 * 1024 * 1024; // 5MB
-  const allowedTypes = ['application/pdf', 'application/msword', 'application/vnd.openxmlformats-officedocument.wordprocessingml.document'];
+  const allowedTypes = [
+    'application/pdf',
+    'application/msword',
+    'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
+  ];
 
   if (file.size > maxSize) {
     Swal.fire('Lỗi!', 'File không được vượt quá 5MB', 'error');
@@ -316,7 +404,7 @@ const validateFile = (file) => {
   }
 
   return true;
-}
+};
 
 const handleFileChange = (event) => {
   const file = event.target.files[0];
@@ -326,152 +414,165 @@ const handleFileChange = (event) => {
   } else {
     event.target.value = '';
   }
-}
+};
 
 const uploadFileToCloudinary = async (file) => {
-  const formData = new FormData()
-  formData.append('file', file)
-  formData.append('upload_preset', CLOUDINARY_UPLOAD_PRESET)
+  const formData = new FormData();
+  formData.append('file', file);
+  formData.append('upload_preset', CLOUDINARY_UPLOAD_PRESET);
 
   try {
     const response = await axios.post(CLOUDINARY_UPLOAD_URL, formData, {
       headers: {
-        'Content-Type': 'multipart/form-data'
-      }
-    })
-    return response.data.secure_url
+        'Content-Type': 'multipart/form-data',
+      },
+    });
+    return response.data.secure_url;
   } catch (error) {
-    console.error('Error uploading file:', error)
-    throw error
+    console.error('Error uploading file:', error);
+    throw error;
   }
-}
+};
 
 // Computed Properties
 const filteredContracts = computed(() => {
-  if (!contractSearchQuery.value) return contracts.value
+  if (!contractSearchQuery.value) return contracts.value;
 
-  const query = contractSearchQuery.value.toLowerCase()
-  return contracts.value.filter(contract =>
-    contract.partner.toLowerCase().includes(query) ||
-    contract.terms.toLowerCase().includes(query)
-  )
-})
+  const query = contractSearchQuery.value.toLowerCase();
+  return contracts.value.filter(
+    (contract) =>
+      contract.partner.toLowerCase().includes(query) ||
+      contract.terms.toLowerCase().includes(query)
+  );
+});
 
 const filteredMaintenanceSchedules = computed(() => {
-  if (!maintenanceSearchQuery.value) return maintenanceSchedules.value
+  if (!maintenanceSearchQuery.value) return maintenanceSchedules.value;
 
-  const query = maintenanceSearchQuery.value.toLowerCase()
-  return maintenanceSchedules.value.filter(schedule =>
-    schedule.type.toLowerCase().includes(query) ||
-    schedule.details.toLowerCase().includes(query) ||
-    getContractPartner(schedule.contractId).toLowerCase().includes(query)
-  )
-})
+  const query = maintenanceSearchQuery.value.toLowerCase();
+  return maintenanceSchedules.value.filter((schedule) => {
+    // Add null checks
+    if (!schedule) return false;
+    return (
+      schedule.type?.toLowerCase().includes(query) ||
+      schedule.details?.toLowerCase().includes(query) ||
+      getContractPartner(schedule.contractId)?.toLowerCase().includes(query)
+    );
+  });
+});
 
 const activeContracts = computed(() => {
-  const today = new Date()
-  return contracts.value.filter(contract => {
-    const endDate = new Date(contract.endDate)
-    return endDate >= today
-  }).length
-})
+  const today = new Date();
+  return contracts.value.filter((contract) => {
+    const endDate = new Date(contract.endDate);
+    return endDate >= today;
+  }).length;
+});
 
 const upcomingMaintenances = computed(() => {
-  const today = new Date()
-  return maintenanceSchedules.value.filter(schedule => {
-    const scheduleDate = new Date(schedule.date)
-    return scheduleDate > today
-  }).length
-})
+  const today = new Date();
+  return maintenanceSchedules.value.filter((schedule) => {
+    // Add null check
+    if (!schedule || !schedule.date) return false;
+    const scheduleDate = new Date(schedule.date);
+    return scheduleDate > today;
+  }).length;
+});
 
 const expiredContracts = computed(() => {
-  const today = new Date()
-  return contracts.value.filter(contract => {
-    const endDate = new Date(contract.endDate)
-    return endDate < today
-  }).length
-})
+  const today = new Date();
+  return contracts.value.filter((contract) => {
+    const endDate = new Date(contract.endDate);
+    return endDate < today;
+  }).length;
+});
 
 // Form Validation
 const validateContractForm = () => {
-  const today = new Date()
-  const startDate = new Date(contractForm.value.startDate)
-  const endDate = new Date(contractForm.value.endDate)
+  const today = new Date();
+  const startDate = new Date(contractForm.value.startDate);
+  const endDate = new Date(contractForm.value.endDate);
 
   if (endDate < startDate) {
-    Swal.fire('Lỗi!', 'Ngày kết thúc phải sau ngày bắt đầu.', 'error')
-    return false
+    Swal.fire('Lỗi!', 'Ngày kết thúc phải sau ngày bắt đầu.', 'error');
+    return false;
   }
 
   if (startDate < today && !isEditing.value) {
-    Swal.fire('Lỗi!', 'Ngày bắt đầu không thể trong quá khứ.', 'error')
-    return false
+    Swal.fire('Lỗi!', 'Ngày bắt đầu không thể trong quá khứ.', 'error');
+    return false;
   }
 
-  return true
-}
+  return true;
+};
 
 const validateMaintenanceForm = () => {
-  const maintenanceDate = new Date(maintenanceForm.value.date)
-  const today = new Date()
+  const maintenanceDate = new Date(maintenanceForm.value.date);
+  const today = new Date();
 
   if (maintenanceDate < today) {
-    Swal.fire('Lỗi!', 'Ngày bảo trì không thể trong quá khứ', 'error')
-    return false
+    Swal.fire('Lỗi!', 'Ngày bảo trì không thể trong quá khứ', 'error');
+    return false;
   }
 
-  const contract = contracts.value.find(c => c.id == maintenanceForm.value.contractId)
+  const contract = contracts.value.find(
+    (c) => c.id == maintenanceForm.value.contractId
+  );
   if (!contract) {
-    Swal.fire('Lỗi!', 'Vui lòng chọn hợp đồng', 'error')
-    return false
+    Swal.fire('Lỗi!', 'Vui lòng chọn hợp đồng', 'error');
+    return false;
   }
 
-  const contractStartDate = new Date(contract.startDate)
-  const contractEndDate = new Date(contract.endDate)
+  const contractStartDate = new Date(contract.startDate);
+  const contractEndDate = new Date(contract.endDate);
 
-  if (maintenanceDate < contractStartDate || maintenanceDate > contractEndDate) {
-    Swal.fire('Lỗi!', 'Ngày bảo trì phải nằm trong thời hạn hợp đồng', 'error')
-    return false
+  if (
+    maintenanceDate < contractStartDate ||
+    maintenanceDate > contractEndDate
+  ) {
+    Swal.fire('Lỗi!', 'Ngày bảo trì phải nằm trong thời hạn hợp đồng', 'error');
+    return false;
   }
 
-  return true
-}
+  return true;
+};
 // Utility Functions
 const formatDate = (date) => {
-  return format(new Date(date), 'dd/MM/yyyy', { locale: vi })
-}
+  return format(new Date(date), 'dd/MM/yyyy', { locale: vi });
+};
 
 const getContractPartner = (contractId) => {
-  const contract = contracts.value.find(c => c.id == contractId)
-  return contract ? contract.partner : 'N/A'
-}
+  if (!contractId) return 'N/A';
+  const contract = contracts.value.find((c) => c.id === contractId);
+  return contract?.partner || 'N/A';
+};
 
 const getContractStatus = (contract) => {
-  const today = new Date()
-  const endDate = new Date(contract.endDate)
-  const startDate = new Date(contract.startDate)
+  const today = new Date();
+  const endDate = new Date(contract.endDate);
+  const startDate = new Date(contract.startDate);
 
-  if (today < startDate) return 'status-pending'
-  if (today > endDate) return 'status-expired'
-  return 'status-active'
-}
+  if (today < startDate) return 'status-pending';
+  if (today > endDate) return 'status-expired';
+  return 'status-active';
+};
 
 const getContractStatusText = (contract) => {
-  const today = new Date()
-  const endDate = new Date(contract.endDate)
-  const startDate = new Date(contract.startDate)
+  const today = new Date();
+  const endDate = new Date(contract.endDate);
+  const startDate = new Date(contract.startDate);
 
-  if (today < startDate) return 'Sắp bắt đầu'
-  if (today > endDate) return 'Đã hết hạn'
-  return 'Đang hiệu lực'
-}
+  if (today < startDate) return 'Sắp bắt đầu';
+  if (today > endDate) return 'Đã hết hạn';
+  return 'Đang hiệu lực';
+};
 
 // Form Handlers
 const showCreateContractForm = () => {
-  isContractFormVisible.value = true
-  isEditing.value = false
-  resetContractForm()
-}
+  isContractFormVisible.value = true;
+  isEditing.value = false;
+  resetContractForm();
+};
 
 const closeContractForm = async () => {
   if (selectedFile.value || contractForm.value.partner) {
@@ -481,13 +582,13 @@ const closeContractForm = async () => {
       icon: 'warning',
       showCancelButton: true,
       confirmButtonText: 'Đồng ý',
-      cancelButtonText: 'Hủy'
-    })
-    if (!result.isConfirmed) return
+      cancelButtonText: 'Hủy',
+    });
+    if (!result.isConfirmed) return;
   }
-  isContractFormVisible.value = false
-  resetContractForm()
-}
+  isContractFormVisible.value = false;
+  resetContractForm();
+};
 
 const resetContractForm = () => {
   contractForm.value = {
@@ -495,163 +596,181 @@ const resetContractForm = () => {
     terms: '',
     startDate: '',
     endDate: '',
-    fileUrl: ''
-  }
-  selectedFile.value = null
-  selectedFileName.value = ''
-}
+    fileUrl: '',
+  };
+  selectedFile.value = null;
+  selectedFileName.value = '';
+};
 
 const showCreateMaintenanceForm = () => {
-  isMaintenanceFormVisible.value = true
-  isEditingMaintenance.value = false
-  resetMaintenanceForm()
-}
+  isMaintenanceFormVisible.value = true;
+  isEditingMaintenance.value = false;
+  resetMaintenanceForm();
+};
 
 const hideCreateMaintenanceForm = () => {
-  isMaintenanceFormVisible.value = false
-  resetMaintenanceForm()
-}
+  isMaintenanceFormVisible.value = false;
+  resetMaintenanceForm();
+};
 
 const resetMaintenanceForm = () => {
   maintenanceForm.value = {
     date: '',
     type: '',
     details: '',
-    contractId: ''
-  }
-}
+    contractId: '',
+  };
+};
 
 // API Operations
 const handleApiError = async (error, message) => {
-  console.error(message, error)
-  let errorMessage = 'Đã có lỗi xảy ra.'
+  console.error(message, error);
+  let errorMessage = 'Đã có lỗi xảy ra.';
 
   if (error.response) {
     switch (error.response.status) {
       case 400:
-        errorMessage = 'Dữ liệu không hợp lệ.'
-        break
+        errorMessage = 'Dữ liệu không hợp lệ.';
+        break;
       case 401:
-        errorMessage = 'Vui lòng đăng nhập lại.'
-        break
+        errorMessage = 'Vui lòng đăng nhập lại.';
+        break;
       case 403:
-        errorMessage = 'Bạn không có quyền thực hiện thao tác này.'
-        break
+        errorMessage = 'Bạn không có quyền thực hiện thao tác này.';
+        break;
       case 404:
-        errorMessage = 'Không tìm thấy dữ liệu.'
-        break
+        errorMessage = 'Không tìm thấy dữ liệu.';
+        break;
       case 500:
-        errorMessage = 'Lỗi hệ thống.'
-        break
+        errorMessage = 'Lỗi hệ thống.';
+        break;
     }
   }
 
-  await Swal.fire('Lỗi!', errorMessage, 'error')
-}
+  await Swal.fire('Lỗi!', errorMessage, 'error');
+};
 
 const fetchContracts = async () => {
   try {
-    isLoading.value = true
-    const response = await axios.get(`${API_BASE_URL}/contracts-admin`)
-    contracts.value = response.data
+    isLoading.value = true;
+    const response = await crudApi.read('api::contracts-admin.contracts-admin');
+    contracts.value = response.data;
   } catch (error) {
-    await handleApiError(error, 'Error fetching contracts')
+    await handleApiError(error, 'Error fetching contracts');
   } finally {
-    isLoading.value = false
+    isLoading.value = false;
   }
-}
+};
 
 const fetchMaintenanceSchedules = async () => {
   try {
-    isLoading.value = true
-    const response = await axios.get(`${API_BASE_URL}/maintenance`)
-    maintenanceSchedules.value = response.data
+    isLoading.value = true;
+    const response = await crudApi.read('api::maintenance.maintenance');
+    // Ensure we have valid data
+    maintenanceSchedules.value = response.data || [];
   } catch (error) {
-    await handleApiError(error, 'Error fetching maintenance schedules')
+    await handleApiError(error, 'Error fetching maintenance schedules');
+    // Set empty array on error
+    maintenanceSchedules.value = [];
   } finally {
-    isLoading.value = false
+    isLoading.value = false;
   }
-}
-
+};
 
 // CRUD Operations
 const saveContract = async () => {
-  if (!validateContractForm()) return
+  if (!validateContractForm()) return;
 
   try {
-    isLoading.value = true
+    isLoading.value = true;
 
     // Upload file nếu có file mới
     if (selectedFile.value) {
-      const fileUrl = await uploadFileToCloudinary(selectedFile.value)
-      contractForm.value.fileUrl = fileUrl
+      const fileUrl = await uploadFileToCloudinary(selectedFile.value);
+      contractForm.value.fileUrl = fileUrl;
     }
 
     if (isEditing.value) {
-      await axios.put(`${API_BASE_URL}/contracts-admin/${contractForm.value.id}`, contractForm.value)
-      const index = contracts.value.findIndex(c => c.id == contractForm.value.id)
+      await crudApi.update(
+        'api::contracts-admin.contracts-admin',
+        { id: contractForm.value.id },
+        contractForm.value
+      );
+      const index = contracts.value.findIndex(
+        (c) => c.id == contractForm.value.id
+      );
       if (index !== -1) {
-        contracts.value[index] = { ...contractForm.value }
+        contracts.value[index] = { ...contractForm.value };
       }
     } else {
-      const response = await axios.post(`${API_BASE_URL}/contracts-admin`, contractForm.value)
-      contracts.value.push(response.data)
+      const response = await crudApi.create(
+        'api::contracts-admin.contracts-admin',
+        contractForm.value
+      );
+      contracts.value.push(response.data);
     }
 
-    await Swal.fire('Thành công!', 'Hợp đồng đã được lưu.', 'success')
-    isContractFormVisible.value = false
-    resetContractForm()
+    await Swal.fire('Thành công!', 'Hợp đồng đã được lưu.', 'success');
+    isContractFormVisible.value = false;
+    resetContractForm();
 
     // Reset file selection
-    selectedFile.value = null
-    selectedFileName.value = ''
-
+    selectedFile.value = null;
+    selectedFileName.value = '';
   } catch (error) {
-    console.error('Error saving contract:', error)
-    await Swal.fire('Lỗi!', 'Không thể lưu hợp đồng.', 'error')
+    console.error('Error saving contract:', error);
+    await Swal.fire('Lỗi!', 'Không thể lưu hợp đồng.', 'error');
   } finally {
-    isLoading.value = false
+    isLoading.value = false;
   }
-}
+};
 
 const saveMaintenance = async () => {
-  if (!validateMaintenanceForm()) return
+  if (!validateMaintenanceForm()) return;
 
   try {
-    isLoading.value = true
+    isLoading.value = true;
     if (isEditingMaintenance.value) {
-      await axios.put(`${API_BASE_URL}/maintenance/${maintenanceForm.value.id}`, maintenanceForm.value)
-      const index = maintenanceSchedules.value.findIndex(m => m.id == maintenanceForm.value.id)
+      await crudApi.update(
+        'api::maintenance.maintenance',
+        { id: maintenanceForm.value.id },
+        maintenanceForm.value
+      );
+      const index = maintenanceSchedules.value.findIndex(
+        (m) => m.id == maintenanceForm.value.id
+      );
       if (index !== -1) {
-        maintenanceSchedules.value[index] = { ...maintenanceForm.value }
+        maintenanceSchedules.value[index] = { ...maintenanceForm.value };
       }
     } else {
-      const response = await axios.post(`${API_BASE_URL}/maintenance`, maintenanceForm.value)
-      maintenanceSchedules.value.push(response.data)
+      const response = await crudApi.create(
+        'api::maintenance.maintenance',
+        maintenanceForm.value
+      );
+      maintenanceSchedules.value.push(response.data);
     }
 
-    await Swal.fire('Thành công!', 'Lịch bảo trì đã được lưu.', 'success')
-    hideCreateMaintenanceForm()
+    await Swal.fire('Thành công!', 'Lịch bảo trì đã được lưu.', 'success');
+    hideCreateMaintenanceForm();
   } catch (error) {
-    console.error('Error saving maintenance:', error)
-    await Swal.fire('Lỗi!', 'Không thể lưu lịch bảo trì.', 'error')
+    console.error('Error saving maintenance:', error);
+    await Swal.fire('Lỗi!', 'Không thể lưu lịch bảo trì.', 'error');
   } finally {
-    isLoading.value = false
+    isLoading.value = false;
   }
-}
+};
 
 const editMaintenance = (schedule) => {
-  maintenanceForm.value = { ...schedule }
-  isEditingMaintenance.value = true
-  isMaintenanceFormVisible.value = true
-}
-
+  maintenanceForm.value = { ...schedule };
+  isEditingMaintenance.value = true;
+  isMaintenanceFormVisible.value = true;
+};
 
 const editContract = (contract) => {
-  contractForm.value = { ...contract }
-  isEditing.value = true
-  isContractFormVisible.value = true
-}
+  contractForm.value = { ...contract };
+  isEditing.value = true;
+  isContractFormVisible.value = true;
+};
 
 const deleteMaintenance = async (id, index) => {
   const result = await Swal.fire({
@@ -660,24 +779,27 @@ const deleteMaintenance = async (id, index) => {
     icon: 'warning',
     showCancelButton: true,
     confirmButtonText: 'Xóa',
-    cancelButtonText: 'Hủy'
-  })
+    cancelButtonText: 'Hủy',
+  });
 
   if (result.isConfirmed) {
     try {
-      isLoading.value = true
-      await axios.delete(`${API_BASE_URL}/maintenance/${id}`)
-      maintenanceSchedules.value.splice(index, 1)
-      await Swal.fire('Đã xóa!', 'Lịch bảo trì đã được xóa thành công.', 'success')
+      isLoading.value = true;
+      await crudApi.delete('api::maintenance.maintenance', { id: id });
+      maintenanceSchedules.value.splice(index, 1);
+      await Swal.fire(
+        'Đã xóa!',
+        'Lịch bảo trì đã được xóa thành công.',
+        'success'
+      );
     } catch (error) {
-      console.error('Error deleting maintenance:', error)
-      await Swal.fire('Lỗi!', 'Không thể xóa lịch bảo trì.', 'error')
+      console.error('Error deleting maintenance:', error);
+      await Swal.fire('Lỗi!', 'Không thể xóa lịch bảo trì.', 'error');
     } finally {
-      isLoading.value = false
+      isLoading.value = false;
     }
   }
-}
-
+};
 
 const deleteContract = async (id, index) => {
   const result = await Swal.fire({
@@ -686,31 +808,28 @@ const deleteContract = async (id, index) => {
     icon: 'warning',
     showCancelButton: true,
     confirmButtonText: 'Xóa',
-    cancelButtonText: 'Hủy'
-  })
+    cancelButtonText: 'Hủy',
+  });
 
   if (result.isConfirmed) {
     try {
-      isLoading.value = true
-      await axios.delete(`${API_BASE_URL}/contracts-admin/${id}`)
-      contracts.value.splice(index, 1)
-      await Swal.fire('Đã xóa!', 'Hợp đồng đã được xóa thành công.', 'success')
+      isLoading.value = true;
+      await crudApi.delete('api::contracts-admin.contracts-admin', { id: id });
+      contracts.value.splice(index, 1);
+      await Swal.fire('Đã xóa!', 'Hợp đồng đã được xóa thành công.', 'success');
     } catch (error) {
-      console.error('Error deleting contract:', error)
-      await Swal.fire('Lỗi!', 'Không thể xóa hợp đồng.', 'error')
+      console.error('Error deleting contract:', error);
+      await Swal.fire('Lỗi!', 'Không thể xóa hợp đồng.', 'error');
     } finally {
-      isLoading.value = false
+      isLoading.value = false;
     }
   }
-}
+};
 
 // Lifecycle Hooks
 onMounted(async () => {
-  await Promise.all([
-    fetchContracts(),
-    fetchMaintenanceSchedules()
-  ])
-})
+  await Promise.all([fetchContracts(), fetchMaintenanceSchedules()]);
+});
 </script>
 
 <style scoped>

@@ -1,9 +1,9 @@
-import axios from "axios";
+import axios from 'axios';
 
-const baseURL = `https://prepared-breeze-81c4a8dee5.strapiapp.com/admin/content-manager/collection-types`;
+const baseURL = `https://beautiful-cuddle-dd0cd92715.strapiapp.com/admin/content-manager/collection-types`;
 
 const JWT = () => {
-    return localStorage.getItem("token");
+  return localStorage.getItem('token');
 };
 
 const callApi = async (method, subURL, data = null) => {
@@ -13,7 +13,7 @@ const callApi = async (method, subURL, data = null) => {
       url: `${baseURL}/${subURL}`,
       headers: {
         Authorization: `Bearer ${JWT()}`,
-        "Content-Type": "application/json",
+        'Content-Type': 'application/json',
       },
       data,
     };
@@ -24,7 +24,7 @@ const callApi = async (method, subURL, data = null) => {
   } catch (error) {
     console.error(
       `API ${method.toUpperCase()} Error:`,
-      error.response?.data || error.message
+      error.response?.data || error.message,
     );
     throw error;
   }
@@ -35,21 +35,21 @@ export const getApi = async (subURL, conditionQuery) => {
     const fieldName = Object.keys(conditionQuery)[0];
     const fieldValue = conditionQuery[fieldName];
     return callApi(
-      "get",
-      `${subURL}?filters[$and][0][email][$eq]=${fieldValue}`
+      'get',
+      `${subURL}?filters[$and][0][email][$eq]=${fieldValue}`,
     );
   }
-  return callApi("get", subURL);
+  return callApi('get', subURL);
 };
 
 export const postApi = async (subURL, data) => {
-  return callApi("post", subURL, data);
+  return callApi('post', subURL, data);
 };
 
 export const putApi = async (subURL, data) => {
-  return callApi("put", subURL, data);
+  return callApi('put', subURL, data);
 };
 
 export const deleteApi = async (subURL) => {
-  return callApi("delete", subURL);
+  return callApi('delete', subURL);
 };

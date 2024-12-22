@@ -1,5 +1,5 @@
 <template>
-  <div class="dashboard container mt-4">
+  <div class="tenant-dashboard container">
     <div class="dashboard-header mb-4">
       <h2><i class="fas fa-home me-2"></i>Tổng quan</h2>
       <p class="text-muted">Xin chào, {{ customerName }}</p>
@@ -34,8 +34,12 @@
                 <i class="fas fa-money-bill-wave"></i>
               </div>
               <h6 class="stat-title">Tiền thuê hàng tháng</h6>
-              <h3 class="stat-value">{{ formatCurrency(roomData?.customer?.rentalCost) }}</h3>
-              <p class="stat-desc">Kỳ thanh toán: {{ roomData?.customer?.paymentCycle }}</p>
+              <h3 class="stat-value">
+                {{ formatCurrency(roomData?.customer?.rentalCost) }}
+              </h3>
+              <p class="stat-desc">
+                Kỳ thanh toán: {{ roomData?.customer?.paymentCycle }}
+              </p>
             </div>
           </div>
         </div>
@@ -48,7 +52,9 @@
               </div>
               <h6 class="stat-title">Hợp đồng còn lại</h6>
               <h3 class="stat-value">{{ remainingDays }} ngày</h3>
-              <p class="stat-desc">Hết hạn: {{ formatDate(contractEndDate) }}</p>
+              <p class="stat-desc">
+                Hết hạn: {{ formatDate(contractEndDate) }}
+              </p>
             </div>
           </div>
         </div>
@@ -74,7 +80,10 @@
             <div class="card-body">
               <div class="d-flex justify-content-between align-items-center mb-3">
                 <h5 class="card-title">Lịch sử thanh toán gần đây</h5>
-                <router-link to="/tenant/payment-history" class="btn btn-outline-primary btn-sm">
+                <router-link
+                  to="/tenant/payment-history"
+                  class="btn btn-outline-primary btn-sm"
+                >
                   Xem tất cả
                 </router-link>
               </div>
@@ -102,7 +111,9 @@
                       </td>
                     </tr>
                     <tr v-if="recentPayments.length == 0">
-                      <td colspan="5" class="text-center">Không có dữ liệu thanh toán</td>
+                      <td colspan="5" class="text-center">
+                        Không có dữ liệu thanh toán
+                      </td>
                     </tr>
                   </tbody>
                 </table>
@@ -117,13 +128,20 @@
             <div class="card-body">
               <div class="d-flex justify-content-between align-items-center mb-3">
                 <h5 class="card-title">Thông báo mới nhất</h5>
-                <router-link to="/tenant/notification" class="btn btn-outline-primary btn-sm">
+                <router-link
+                  to="/tenant/notification"
+                  class="btn btn-outline-primary btn-sm"
+                >
                   Xem tất cả
                 </router-link>
               </div>
               <div class="notifications-list">
-                <div v-for="notification in recentNotifications" :key="notification.date" class="notification-item"
-                  :class="{ 'unread': !notification.read }">
+                <div
+                  v-for="notification in recentNotifications"
+                  :key="notification.date"
+                  class="notification-item"
+                  :class="{ unread: !notification.read }"
+                >
                   <h6>{{ notification.title }}</h6>
                   <p class="text-muted">{{ notification.message }}</p>
                   <small>{{ formatDate(notification.date) }}</small>
@@ -139,7 +157,11 @@
         <div class="card-body">
           <h5 class="card-title">Dịch vụ đăng ký</h5>
           <div class="row">
-            <div v-for="service in roomData?.customer?.services" :key="service.id" class="col-md-3">
+            <div
+              v-for="service in roomData?.customer?.services"
+              :key="service.id"
+              class="col-md-3"
+            >
               <div class="service-item">
                 <i class="fas fa-check-circle text-success me-2"></i>
                 <span>{{ service.name }}</span>
@@ -157,7 +179,7 @@
 
 <script>
 import crudApi from '@/apis/crudApi';
-
+import '@/styles/tenant/tenant-dashboard.css';
 export default {
   name: 'TenantDashboard',
 
@@ -181,7 +203,7 @@ export default {
     },
 
     unreadNotifications() {
-      return this.notifications.filter(n => !n.read).length;
+      return this.notifications.filter((n) => !n.read).length;
     },
 
     totalNotifications() {
@@ -190,7 +212,10 @@ export default {
 
     contractEndDate() {
       if (this.roomData?.customer?.contracts?.length) {
-        const currentContract = this.roomData.customer.contracts[this.roomData.customer.contracts.length - 1];
+        const currentContract =
+          this.roomData.customer.contracts[
+            this.roomData.customer.contracts.length - 1
+          ];
         return currentContract.contractEndDate;
       }
       return null;
@@ -204,7 +229,7 @@ export default {
         return Math.ceil(diffTime / (1000 * 60 * 60 * 24));
       }
       return 0;
-    }
+    },
   },
 
   async created() {
@@ -212,7 +237,7 @@ export default {
       await Promise.all([
         this.loadRoomData(),
         this.loadPaymentHistory(),
-        this.loadNotifications()
+        this.loadNotifications(),
       ]);
     } catch (error) {
       console.error('Error initializing dashboard:', error);
@@ -229,19 +254,21 @@ export default {
 
         const customersResponse = await crudApi.read('api::customer.customer');
         const customers = customersResponse.data;
-        const customerData = customers.find(c => c.email == currentUser.email);
+        const customerData = customers.find(
+          (c) => c.email == currentUser.email
+        );
 
         if (customerData) {
           const homesResponse = await crudApi.read('api::home.home');
           const homes = homesResponse.data;
-          const home = homes.find(h => h.id == customerData.houseId);
+          const home = homes.find((h) => h.id == customerData.houseId);
 
           if (home) {
             this.roomData = {
               roomNumber: customerData.roomNumber,
               houseName: home.name,
               houseAddress: `${home.address}, ${home.ward}, ${home.district}, ${home.city}`,
-              customer: customerData
+              customer: customerData,
             };
           }
         }
@@ -257,14 +284,14 @@ export default {
         const bills = response.data;
 
         this.paymentHistory = bills
-          .filter(bill => bill.customerEmail == currentUser.email)
-          .map(bill => {
+          .filter((bill) => bill.customerEmail == currentUser.email)
+          .map((bill) => {
             console.log('Bill month:', bill.month); // Thêm dòng này để debug
             return {
               monthYear: bill.month,
               totalAmount: bill.totalAmount,
               paidAmount: bill.paidAmount,
-              remainingAmount: bill.remainingAmount
+              remainingAmount: bill.remainingAmount,
             };
           });
       } catch (error) {
@@ -275,10 +302,11 @@ export default {
     async loadNotifications() {
       try {
         const currentUser = JSON.parse(localStorage.getItem('currentUser'));
-        const allNotifications = JSON.parse(localStorage.getItem('notifications')) || [];
+        const allNotifications =
+          JSON.parse(localStorage.getItem('notifications')) || [];
 
         this.notifications = allNotifications
-          .filter(n => n.targetEmail == currentUser.email)
+          .filter((n) => n.targetEmail == currentUser.email)
           .sort((a, b) => new Date(b.date) - new Date(a.date));
       } catch (error) {
         console.error('Error loading notifications:', error);
@@ -289,7 +317,7 @@ export default {
       if (!value) return '0 ₫';
       return new Intl.NumberFormat('vi-VN', {
         style: 'currency',
-        currency: 'VND'
+        currency: 'VND',
       }).format(value);
     },
 
@@ -314,114 +342,7 @@ export default {
       if (!payment.remainingAmount) return 'Đã thanh toán';
       if (!payment.paidAmount) return 'Chưa thanh toán';
       return 'Thanh toán một phần';
-    }
-  }
+    },
+  },
 };
 </script>
-
-<style scoped>
-.dashboard {
-  margin-top: 5em !important;
-  min-height: 100vh;
-  padding: 20px;
-  background-color: #f8f9fa;
-}
-
-.dashboard-header h2 {
-  color: #2a3f54;
-  font-size: 30px;
-  font-weight: 500;
-}
-
-.stat-card {
-  border: none;
-  border-radius: 10px;
-  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-  transition: transform 0.2s;
-}
-
-.stat-card:hover {
-  transform: translateY(-5px);
-}
-
-.stat-icon {
-  width: 50px;
-  height: 50px;
-  border-radius: 10px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  margin-bottom: 15px;
-}
-
-.stat-icon i {
-  color: white;
-  font-size: 24px;
-}
-
-.stat-title {
-  color: #6c757d;
-  font-size: 14px;
-  margin-bottom: 10px;
-}
-
-.stat-value {
-  font-size: 24px;
-  font-weight: 600;
-  margin-bottom: 5px;
-}
-
-.stat-desc {
-  color: #6c757d;
-  font-size: 13px;
-  margin: 0;
-}
-
-.notification-item {
-  padding: 10px 0;
-  border-bottom: 1px solid #eee;
-}
-
-.notification-item:last-child {
-  border-bottom: none;
-}
-
-.notification-item.unread h6 {
-  font-weight: 600;
-}
-
-.notification-item h6 {
-  margin-bottom: 5px;
-}
-
-.notification-item p {
-  font-size: 14px;
-  margin-bottom: 5px;
-}
-
-.notification-item small {
-  color: #6c757d;
-}
-
-.service-item {
-  padding: 10px;
-  background-color: #f8f9fa;
-  border-radius: 5px;
-  margin-bottom: 10px;
-}
-
-.badge {
-  padding: 8px 12px;
-  border-radius: 20px;
-}
-
-@media (max-width: 768px) {
-  .dashboard {
-    padding: 10px;
-  }
-
-  .stat-card {
-    margin-bottom: 15px;
-  }
-}
-</style>

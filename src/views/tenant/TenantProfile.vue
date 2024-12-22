@@ -9,7 +9,7 @@
     <div v-else>
       <!-- Header Section -->
       <div class="profile-header mb-4">
-        <div class="d-flex justify-content-between align-items-center">
+        <div class="justify-content-between align-items-center">
           <div>
             <h2><i class="fas fa-user-circle me-2"></i>Hồ sơ của tôi</h2>
             <p class="text-muted">Quản lý thông tin cá nhân của bạn</p>
@@ -225,8 +225,12 @@
             Bạn có thay đổi chưa được lưu. Bạn có chắc chắn muốn hủy không?
           </div>
           <div class="modal-footer">
-            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Không</button>
-            <button type="button" class="btn btn-primary" @click="confirmCancel">Có</button>
+            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+              Không
+            </button>
+            <button type="button" class="btn btn-primary" @click="confirmCancel">
+              Có
+            </button>
           </div>
         </div>
       </div>
@@ -238,6 +242,7 @@
 import Swal from 'sweetalert2';
 import { Modal } from 'bootstrap';
 import crudApi from '@/apis/crudApi';
+import '@/styles/tenant/tenant-profile.css';
 
 export default {
   data() {
@@ -282,12 +287,14 @@ export default {
 
   computed: {
     isFormValid() {
-      return !Object.values(this.errors).some(error => error) &&
+      return (
+        !Object.values(this.errors).some((error) => error) &&
         this.profile.fullName &&
         this.profile.identityCard &&
         this.profile.phoneNumber &&
         this.profile.birthDate &&
-        this.profile.address;
+        this.profile.address
+      );
     },
 
     formattedRentalCost() {
@@ -296,28 +303,35 @@ export default {
 
     formattedDeposit() {
       return this.formatCurrency(this.profile.deposit);
-    }
+    },
   },
 
   watch: {
     profile: {
       handler(newVal) {
         if (this.originalProfile) {
-          this.hasChanges = JSON.stringify(newVal) !== JSON.stringify(this.originalProfile);
+          this.hasChanges =
+            JSON.stringify(newVal) !== JSON.stringify(this.originalProfile);
         }
         this.validateForm();
       },
-      deep: true
-    }
+      deep: true,
+    },
   },
 
   async mounted() {
     try {
       await this.loadProfile();
-      this.unsavedChangesModal = new Modal(document.getElementById('unsavedChangesModal'));
+      this.unsavedChangesModal = new Modal(
+        document.getElementById('unsavedChangesModal')
+      );
     } catch (error) {
       console.error('Error initializing profile:', error);
-      Swal.fire('Lỗi', 'Không thể tải thông tin hồ sơ. Vui lòng thử lại sau.', 'error');
+      Swal.fire(
+        'Lỗi',
+        'Không thể tải thông tin hồ sơ. Vui lòng thử lại sau.',
+        'error'
+      );
     } finally {
       this.loading = false;
     }
@@ -330,14 +344,15 @@ export default {
 
         // Fetch customer data
         const customersResponse = await crudApi.read('api::customer.customer', {
-          email: currentUser.email
+          email: currentUser.email,
           // populate: ['house'] // Thêm populate để lấy thông tin nhà
         });
 
         if (customersResponse.data && customersResponse.data.length > 0) {
           const customerData = customersResponse.data[0];
           const hourseRes = await crudApi.read('api::home.home', {
-            id: customerData.houseId});
+            id: customerData.houseId,
+          });
           const houseData = hourseRes.data[0];
 
           this.profile = {
@@ -359,21 +374,22 @@ export default {
             notes: customerData.notes,
             image: customerData.image || this.defaultAvatar,
             houseName: houseData?.name,
-            houseAddress: houseData ? `${houseData.address}, ${houseData.ward}, ${houseData.district}, ${houseData.city}` : ''
+            houseAddress: houseData
+              ? `${houseData.address}, ${houseData.ward}, ${houseData.district}, ${houseData.city}`
+              : '',
           };
 
           this.originalProfile = { ...this.profile };
-        } 
+        }
       } catch (error) {
         console.error('Error loading profile:', error);
         throw error;
       }
     },
 
-
     validateForm() {
       // Reset errors
-      Object.keys(this.errors).forEach(key => this.errors[key] = '');
+      Object.keys(this.errors).forEach((key) => (this.errors[key] = ''));
 
       // Validate fullName
       if (!this.profile.fullName) {
@@ -419,19 +435,23 @@ export default {
         this.isSaving = true;
 
         const updateData = {
-            fullName: this.profile.fullName,
-            identityCard: this.profile.identityCard,
-            phoneNumber1: this.profile.phoneNumber,
-            birthDate: this.profile.birthDate,
-            address: this.profile.address,
-            gender: this.profile.gender,
-            licensePlate: this.profile.licensePlate,
-            notes: this.profile.notes,
-            image: this.profile.image,
-            paymentCycle: this.profile.paymentCycle
+          fullName: this.profile.fullName,
+          identityCard: this.profile.identityCard,
+          phoneNumber1: this.profile.phoneNumber,
+          birthDate: this.profile.birthDate,
+          address: this.profile.address,
+          gender: this.profile.gender,
+          licensePlate: this.profile.licensePlate,
+          notes: this.profile.notes,
+          image: this.profile.image,
+          paymentCycle: this.profile.paymentCycle,
         };
 
-        const response = await crudApi.update('api::customer.customer', {id: this.profile.id}, updateData);
+        const response = await crudApi.update(
+          'api::customer.customer',
+          { id: this.profile.id },
+          updateData
+        );
 
         if (response.error) {
           throw new Error(response.error);
@@ -445,7 +465,7 @@ export default {
           title: 'Thành công!',
           text: 'Hồ sơ đã được cập nhật!',
           timer: 1500,
-          showConfirmButton: false
+          showConfirmButton: false,
         });
 
         this.isEditing = false;
@@ -488,7 +508,11 @@ export default {
             this.profile.image = imageUrl;
           }
         } catch (error) {
-          Swal.fire('Lỗi', 'Không thể tải lên ảnh. Vui lòng thử lại sau.', 'error');
+          Swal.fire(
+            'Lỗi',
+            'Không thể tải lên ảnh. Vui lòng thử lại sau.',
+            'error'
+          );
         }
       }
     },
@@ -526,140 +550,13 @@ export default {
     formatCurrency(value) {
       if (!value) return '0';
       return new Intl.NumberFormat('vi-VN').format(value);
-    }
+    },
   },
 
   beforeUnmount() {
     if (this.unsavedChangesModal) {
       this.unsavedChangesModal.dispose();
     }
-  }
+  },
 };
 </script>
-
-<style scoped>
-.profile-container {
-  margin-top: 5em !important;
-  padding: 20px;
-  background-color: #f8f9fa;
-}
-
-.profile-header {
-  background-color: #fff;
-  padding: 20px;
-  border-radius: 10px;
-  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-}
-
-.section {
-  margin-top: 20px;
-  padding: 20px;
-  background-color: #ffffff;
-  border-radius: 10px;
-  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-  transition: transform 0.2s;
-}
-
-.section:hover {
-  transform: translateY(-2px);
-}
-
-.profile-avatar {
-  width: 150px;
-  height: 150px;
-  border-radius: 50%;
-  object-fit: cover;
-  border: 4px solid #fff;
-  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-}
-
-.avatar-wrapper {
-  position: relative;
-  display: inline-block;
-}
-
-.avatar-overlay {
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  border-radius: 50%;
-  background: rgba(0, 0, 0, 0.5);
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  color: white;
-  cursor: pointer;
-  opacity: 0;
-  transition: opacity 0.3s;
-}
-
-.avatar-overlay:hover {
-  opacity: 1;
-}
-
-.form-group {
-  margin-bottom: 1rem;
-}
-
-.form-control,
-.form-select {
-  border-radius: 8px;
-  border: 1px solid #ced4da;
-  padding: 10px 15px;
-}
-
-.form-control:focus,
-.form-select:focus {
-  border-color: #80bdff;
-  box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.25);
-}
-
-.required::after {
-  content: '*';
-  color: red;
-  margin-left: 4px;
-}
-
-.btn {
-  padding: 8px 16px;
-  border-radius: 8px;
-  font-weight: 500;
-  transition: all 0.3s;
-}
-
-.btn:hover {
-  transform: translateY(-1px);
-}
-
-.gender-options {
-  display: flex;
-  gap: 20px;
-}
-
-@media (max-width: 768px) {
-  .profile-container {
-    padding: 10px;
-  }
-
-  .action-buttons {
-    margin-top: 10px;
-  }
-
-  .profile-avatar {
-    width: 120px;
-    height: 120px;
-  }
-
-  .section {
-    padding: 15px;
-  }
-
-  .gender-options {
-    flex-direction: column;
-    gap: 10px;
-  }
-}
-</style>

@@ -1,5 +1,5 @@
 <template>
-  <div class="payment-history container mt-4">
+  <div class="payment-history container">
     <div class="header-section mb-4">
       <h2>Lịch sử thanh toán</h2>
       <div class="filter-section">
@@ -9,11 +9,11 @@
               <span class="input-group-text">
                 <i class="fas fa-search"></i>
               </span>
-              <input 
-                type="text" 
-                class="form-control" 
+              <input
+                type="text"
+                class="form-control"
                 v-model="searchTerm"
-                placeholder="Tìm kiếm..." 
+                placeholder="Tìm kiếm..."
               />
             </div>
           </div>
@@ -47,7 +47,9 @@
           <div class="card summary-card">
             <div class="card-body">
               <h6 class="card-subtitle mb-2 text-muted">Tổng số tiền</h6>
-              <h3 class="card-title text-primary">{{ formatCurrency(totalAmount) }}</h3>
+              <h3 class="card-title text-primary">
+                {{ formatCurrency(totalAmount) }}
+              </h3>
             </div>
           </div>
         </div>
@@ -55,7 +57,9 @@
           <div class="card summary-card">
             <div class="card-body">
               <h6 class="card-subtitle mb-2 text-muted">Đã thanh toán</h6>
-              <h3 class="card-title text-success">{{ formatCurrency(totalPaid) }}</h3>
+              <h3 class="card-title text-success">
+                {{ formatCurrency(totalPaid) }}
+              </h3>
             </div>
           </div>
         </div>
@@ -63,7 +67,9 @@
           <div class="card summary-card">
             <div class="card-body">
               <h6 class="card-subtitle mb-2 text-muted">Còn nợ</h6>
-              <h3 class="card-title text-danger">{{ formatCurrency(totalRemaining) }}</h3>
+              <h3 class="card-title text-danger">
+                {{ formatCurrency(totalRemaining) }}
+              </h3>
             </div>
           </div>
         </div>
@@ -96,7 +102,10 @@
                 </tr>
               </thead>
               <tbody>
-                <tr v-for="payment in filteredAndSortedHistory" :key="payment.monthYear">
+                <tr
+                  v-for="payment in filteredAndSortedHistory"
+                  :key="payment.monthYear"
+                >
                   <td>{{ formatMonthYear(payment.monthYear) }}</td>
                   <td>{{ formatCurrency(payment.totalAmount) }}</td>
                   <td>{{ formatCurrency(payment.paidAmount) }}</td>
@@ -112,7 +121,10 @@
           </div>
 
           <!-- No Data Message -->
-          <div v-if="filteredAndSortedHistory.length == 0" class="text-center py-4">
+          <div
+            v-if="filteredAndSortedHistory.length == 0"
+            class="text-center py-4"
+          >
             <i class="fas fa-search fa-3x text-muted mb-3"></i>
             <p class="text-muted">Không tìm thấy dữ liệu phù hợp</p>
           </div>
@@ -125,6 +137,7 @@
 <script>
 import * as XLSX from 'xlsx';
 import crudApi from '@/apis/crudApi';
+import '@/styles/tenant/tenant-payment-history.css';
 
 export default {
   data() {
@@ -141,7 +154,7 @@ export default {
   computed: {
     availableYears() {
       const years = new Set();
-      this.paymentHistory.forEach(payment => {
+      this.paymentHistory.forEach((payment) => {
         const year = payment.monthYear.split('-')[0];
         years.add(year);
       });
@@ -153,14 +166,16 @@ export default {
 
       // Filter by search term
       if (this.searchTerm) {
-        result = result.filter(payment => 
-          payment.monthYear.toLowerCase().includes(this.searchTerm.toLowerCase())
+        result = result.filter((payment) =>
+          payment.monthYear
+            .toLowerCase()
+            .includes(this.searchTerm.toLowerCase())
         );
       }
 
       // Filter by year
       if (this.filterYear) {
-        result = result.filter(payment => 
+        result = result.filter((payment) =>
           payment.monthYear.startsWith(this.filterYear)
         );
       }
@@ -178,15 +193,24 @@ export default {
     },
 
     totalAmount() {
-      return this.paymentHistory.reduce((sum, payment) => sum + payment.totalAmount, 0);
+      return this.paymentHistory.reduce(
+        (sum, payment) => sum + payment.totalAmount,
+        0
+      );
     },
 
     totalPaid() {
-      return this.paymentHistory.reduce((sum, payment) => sum + payment.paidAmount, 0);
+      return this.paymentHistory.reduce(
+        (sum, payment) => sum + payment.paidAmount,
+        0
+      );
     },
 
     totalRemaining() {
-      return this.paymentHistory.reduce((sum, payment) => sum + payment.remainingAmount, 0);
+      return this.paymentHistory.reduce(
+        (sum, payment) => sum + payment.remainingAmount,
+        0
+      );
     },
   },
 
@@ -201,14 +225,14 @@ export default {
         const response = await crudApi.read('api::bill.bill');
         // const response = await fetch('https://6725a513c39fedae05b5670b.mockapi.io/api/v1/bills');
         const bills = response.data;
-        
+
         this.paymentHistory = bills
-          .filter(bill => bill.customerEmail == currentUser.email)
-          .map(bill => ({
+          .filter((bill) => bill.customerEmail == currentUser.email)
+          .map((bill) => ({
             monthYear: bill.month,
             totalAmount: bill.totalAmount,
             paidAmount: bill.paidAmount,
-            remainingAmount: bill.remainingAmount
+            remainingAmount: bill.remainingAmount,
           }));
       } catch (error) {
         console.error('Error loading payment history:', error);
@@ -218,9 +242,9 @@ export default {
     },
 
     formatCurrency(value) {
-      return new Intl.NumberFormat('vi-VN', { 
-        style: 'currency', 
-        currency: 'VND' 
+      return new Intl.NumberFormat('vi-VN', {
+        style: 'currency',
+        currency: 'VND',
       }).format(value);
     },
 
@@ -258,89 +282,19 @@ export default {
     },
 
     exportToExcel() {
-      const data = this.filteredAndSortedHistory.map(payment => ({
+      const data = this.filteredAndSortedHistory.map((payment) => ({
         'Tháng/Năm': this.formatMonthYear(payment.monthYear),
         'Tổng số tiền': this.formatCurrency(payment.totalAmount),
         'Đã trả': this.formatCurrency(payment.paidAmount),
         'Còn lại': this.formatCurrency(payment.remainingAmount),
-        'Trạng thái': this.getStatusText(payment)
+        'Trạng thái': this.getStatusText(payment),
       }));
 
       const ws = XLSX.utils.json_to_sheet(data);
       const wb = XLSX.utils.book_new();
       XLSX.utils.book_append_sheet(wb, ws, 'Lịch sử thanh toán');
       XLSX.writeFile(wb, 'lich-su-thanh-toan.xlsx');
-    }
-  }
+    },
+  },
 };
 </script>
-
-<style scoped>
-.payment-history {
-  margin-top: 5em !important;
-  min-height: 100vh;
-  padding: 20px;
-  background-color: #f8f9fa;
-  border-radius: 8px;
-  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-}
-
-.header-section h2 {
-  color: #2a3f54;
-  margin-bottom: 1.5rem;
-}
-
-.filter-section {
-  background-color: white;
-  padding: 1.5rem;
-  border-radius: 8px;
-  box-shadow: 0 2px 4px rgba(0,0,0,0.05);
-}
-
-.summary-card {
-  border: none;
-  box-shadow: 0 2px 4px rgba(0,0,0,0.05);
-  transition: transform 0.2s;
-}
-
-.summary-card:hover {
-  transform: translateY(-5px);
-}
-
-.table {
-  margin-bottom: 0;
-}
-
-.sortable {
-  cursor: pointer;
-  user-select: none;
-}
-
-.sortable i {
-  margin-left: 5px;
-}
-
-.badge {
-  padding: 8px 12px;
-  border-radius: 20px;
-}
-
-.table th {
-  font-weight: 600;
-  color: #495057;
-}
-
-.table td {
-  vertical-align: middle;
-}
-
-@media (max-width: 768px) {
-  .filter-section .row > div {
-    margin-bottom: 1rem;
-  }
-  
-  .summary-card {
-    margin-bottom: 1rem;
-  }
-}
-</style>

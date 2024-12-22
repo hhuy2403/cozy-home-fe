@@ -1,5 +1,5 @@
 <template>
-  <div class="tenant-payment container mt-4">
+  <div class="tenant-payment container">
     <!-- Header Section -->
     <div class="row mb-4 align-items-start">
       <div class="col-md-6">
@@ -11,7 +11,10 @@
         </nav>
         <h2 class="d-flex align-items-center">
           Thanh toán hóa đơn
-          <span v-if="currentBill" :class="['badge ms-3', getBadgeClass(currentBill.remainingAmount)]">
+          <span
+            v-if="currentBill"
+            :class="['badge ms-3', getBadgeClass(currentBill.remainingAmount)]"
+          >
             {{ getPaymentStatus(currentBill.remainingAmount) }}
           </span>
         </h2>
@@ -30,10 +33,20 @@
       <!-- Filter Section -->
       <div class="row mb-4">
         <div class="col-md-4">
-          <label for="selectedMonth" class="form-label fw-bold">Chọn tháng</label>
+          <label for="selectedMonth" class="form-label fw-bold"
+            >Chọn tháng</label
+          >
           <div class="input-group">
-            <span class="input-group-text"><i class="fas fa-calendar"></i></span>
-            <input type="month" id="selectedMonth" v-model="selectedMonth" class="form-control" :max="currentMonth" />
+            <span class="input-group-text"
+              ><i class="fas fa-calendar"></i
+            ></span>
+            <input
+              type="month"
+              id="selectedMonth"
+              v-model="selectedMonth"
+              class="form-control"
+              :max="currentMonth"
+            />
           </div>
         </div>
       </div>
@@ -43,7 +56,9 @@
         <!-- Invoice Summary -->
         <div class="col-md-8">
           <div class="card mb-4">
-            <div class="card-header bg-primary text-white d-flex justify-content-between align-items-center">
+            <div
+              class="card-header bg-primary text-white d-flex justify-content-between align-items-center"
+            >
               <h5 class="card-title mb-0">Chi tiết hóa đơn</h5>
               <!-- <button v-if="currentBill" class="btn btn-light btn-sm" @click="downloadInvoice">
                 <i class="fas fa-download me-2"></i>Tải hóa đơn
@@ -66,11 +81,13 @@
                   <div class="col-md-6">
                     <div class="info-item">
                       <i class="fas fa-user me-2"></i>
-                      <strong>Khách thuê:</strong> {{ currentBill.customerName }}
+                      <strong>Khách thuê:</strong>
+                      {{ currentBill.customerName }}
                     </div>
                     <div class="info-item">
                       <i class="fas fa-calendar-alt me-2"></i>
-                      <strong>Tháng:</strong> {{ formatMonth(currentBill.month) }}
+                      <strong>Tháng:</strong>
+                      {{ formatMonth(currentBill.month) }}
                     </div>
                   </div>
                 </div>
@@ -88,54 +105,72 @@
                     <tbody>
                       <!-- Rental Cost -->
                       <tr>
-                        <td>
-                          <i class="fas fa-home me-2"></i>Tiền thuê phòng
-                        </td>
+                        <td><i class="fas fa-home me-2"></i>Tiền thuê phòng</td>
                         <td>-</td>
                         <td class="text-end">
-                          {{ formatCurrency(currentBill.billDetails.rentalCost.amount) }}
+                          {{
+                            formatCurrency(
+                              currentBill.billDetails.rentalCost.amount
+                            )
+                          }}
                         </td>
                       </tr>
 
                       <!-- Electric Bill -->
                       <tr>
-                        <td>
-                          <i class="fas fa-bolt me-2"></i>Tiền điện
-                        </td>
+                        <td><i class="fas fa-bolt me-2"></i>Tiền điện</td>
                         <td>
                           {{ currentBill.billDetails.electric.usage }} kWh
                           <small class="text-muted">
-                            ({{ formatCurrency(currentBill.billDetails.electric.unitPrice) }}/kWh)
+                            ({{
+                              formatCurrency(
+                                currentBill.billDetails.electric.unitPrice
+                              )
+                            }}/kWh)
                           </small>
                         </td>
                         <td class="text-end">
-                          {{ formatCurrency(currentBill.billDetails.electric.amount) }}
+                          {{
+                            formatCurrency(
+                              currentBill.billDetails.electric.amount
+                            )
+                          }}
                         </td>
                       </tr>
 
                       <!-- Water Bill -->
                       <tr>
-                        <td>
-                          <i class="fas fa-tint me-2"></i>Tiền nước
-                        </td>
+                        <td><i class="fas fa-tint me-2"></i>Tiền nước</td>
                         <td>
                           {{ currentBill.billDetails.water.usage }} m³
                           <small class="text-muted">
-                            ({{ formatCurrency(currentBill.billDetails.water.unitPrice) }}/m³)
+                            ({{
+                              formatCurrency(
+                                currentBill.billDetails.water.unitPrice
+                              )
+                            }}/m³)
                           </small>
                         </td>
                         <td class="text-end">
-                          {{ formatCurrency(currentBill.billDetails.water.amount) }}
+                          {{
+                            formatCurrency(currentBill.billDetails.water.amount)
+                          }}
                         </td>
                       </tr>
 
                       <!-- Services -->
-                      <tr v-for="service in currentBill.billDetails.services" :key="service.name" class="service-row">
+                      <tr
+                        v-for="service in currentBill.billDetails.services"
+                        :key="service.name"
+                        class="service-row"
+                      >
                         <td>
-                          <i class="fas fa-concierge-bell me-2"></i>{{ service.name }}
+                          <i class="fas fa-concierge-bell me-2"></i
+                          >{{ service.name }}
                         </td>
                         <td>
-                          {{ service.quantity }} x {{ formatCurrency(service.unitPrice) }}
+                          {{ service.quantity }} x
+                          {{ formatCurrency(service.unitPrice) }}
                         </td>
                         <td class="text-end">
                           {{ formatCurrency(service.amount) }}
@@ -143,9 +178,15 @@
                       </tr>
 
                       <!-- Other Fees -->
-                      <tr v-for="(fee, index) in currentBill.billDetails.otherFees" :key="index" class="fee-row">
+                      <tr
+                        v-for="(fee, index) in currentBill.billDetails
+                          .otherFees"
+                        :key="index"
+                        class="fee-row"
+                      >
                         <td colspan="2">
-                          <i class="fas fa-plus-circle me-2"></i>{{ fee.description }}
+                          <i class="fas fa-plus-circle me-2"></i
+                          >{{ fee.description }}
                         </td>
                         <td class="text-end">
                           {{ formatCurrency(fee.amount) }}
@@ -155,15 +196,21 @@
                     <tfoot class="table-light">
                       <tr class="fw-bold">
                         <td colspan="2">Tổng cộng</td>
-                        <td class="text-end">{{ formatCurrency(currentBill.totalAmount) }}</td>
+                        <td class="text-end">
+                          {{ formatCurrency(currentBill.totalAmount) }}
+                        </td>
                       </tr>
                       <tr class="text-success">
                         <td colspan="2">Đã thanh toán</td>
-                        <td class="text-end">{{ formatCurrency(currentBill.paidAmount) }}</td>
+                        <td class="text-end">
+                          {{ formatCurrency(currentBill.paidAmount) }}
+                        </td>
                       </tr>
                       <tr class="text-danger fw-bold">
                         <td colspan="2">Còn lại</td>
-                        <td class="text-end">{{ formatCurrency(currentBill.remainingAmount) }}</td>
+                        <td class="text-end">
+                          {{ formatCurrency(currentBill.remainingAmount) }}
+                        </td>
                       </tr>
                     </tfoot>
                   </table>
@@ -181,27 +228,37 @@
 
         <!-- Payment Methods -->
         <div class="col-md-4">
-          <div class="card mb-4" v-if="landlordInfo && landlordInfo.paymentSettings">
+          <div
+            class="card mb-4"
+            v-if="landlordInfo && landlordInfo.paymentSettings"
+          >
             <div class="card-header bg-primary text-white">
               <h5 class="card-title mb-0">Phương thức thanh toán</h5>
             </div>
             <div class="card-body">
               <!-- Payment Method Selector -->
               <div class="mb-4">
-                <label class="form-label fw-bold">Chọn phương thức thanh toán</label>
-                <select v-model="selectedPaymentMethod" class="form-select" @change="handlePaymentMethodChange">
+                <label class="form-label fw-bold"
+                  >Chọn phương thức thanh toán</label
+                >
+                <select
+                  v-model="selectedPaymentMethod"
+                  class="form-select"
+                  @change="handlePaymentMethodChange"
+                >
                   <option value="">-- Chọn phương thức --</option>
                   <option value="bank" v-if="hasBankInfo">
-                    <i class="fas fa-university"></i> Chuyển khoản ngân hàng
+                    Chuyển khoản ngân hàng
                   </option>
-                  <option value="momo" v-if="hasMomoInfo">
-                    <i class="fas fa-wallet"></i> Ví Momo
-                  </option>
+                  <option value="momo" v-if="hasMomoInfo">Ví Momo</option>
                 </select>
               </div>
 
               <!-- Bank Transfer Details -->
-              <div class="payment-details" v-if="selectedPaymentMethod === 'bank' && hasBankInfo">
+              <div
+                class="payment-details"
+                v-if="selectedPaymentMethod === 'bank' && hasBankInfo"
+              >
                 <div class="payment-method-card">
                   <div class="payment-header">
                     <i class="fas fa-university me-2"></i>
@@ -220,9 +277,17 @@
                       <span class="info-label">
                         <i class="fas fa-credit-card me-2"></i>Số tài khoản:
                       </span>
-                      <span class="info-value copy-enabled"
-                        @click="copyToClipboard(landlordInfo.paymentSettings.bankInfo.accountNumber)">
-                        {{ landlordInfo.paymentSettings.bankInfo.accountNumber }}
+                      <span
+                        class="info-value copy-enabled"
+                        @click="
+                          copyToClipboard(
+                            landlordInfo.paymentSettings.bankInfo.accountNumber
+                          )
+                        "
+                      >
+                        {{
+                          landlordInfo.paymentSettings.bankInfo.accountNumber
+                        }}
                         <i class="fas fa-copy ms-2"></i>
                       </span>
                     </div>
@@ -231,12 +296,24 @@
                         <i class="fas fa-user me-2"></i>Chủ tài khoản:
                       </span>
                       <span class="info-value">
-                        {{ landlordInfo.paymentSettings.bankInfo.accountHolder }}
+                        {{
+                          landlordInfo.paymentSettings.bankInfo.accountHolder
+                        }}
                       </span>
                     </div>
-                    <div class="qr-container" v-if="landlordInfo.paymentSettings.bankInfo.qrCode">
-                      <img :src="landlordInfo.paymentSettings.bankInfo.qrCode" alt="QR Code" class="qr-code" />
-                      <button class="btn btn-outline-primary btn-sm mt-2" @click="downloadQR('bank')">
+                    <div
+                      class="qr-container"
+                      v-if="landlordInfo.paymentSettings.bankInfo.qrCode"
+                    >
+                      <img
+                        :src="landlordInfo.paymentSettings.bankInfo.qrCode"
+                        alt="QR Code"
+                        class="qr-code"
+                      />
+                      <button
+                        class="btn btn-outline-primary btn-sm mt-2"
+                        @click="downloadQR('bank')"
+                      >
                         <i class="fas fa-download me-2"></i>Tải QR
                       </button>
                     </div>
@@ -245,7 +322,10 @@
               </div>
 
               <!-- Momo Details -->
-              <div class="payment-details" v-if="selectedPaymentMethod === 'momo' && hasMomoInfo">
+              <div
+                class="payment-details"
+                v-if="selectedPaymentMethod === 'momo' && hasMomoInfo"
+              >
                 <div class="payment-method-card">
                   <div class="payment-header">
                     <i class="fas fa-wallet me-2"></i>
@@ -256,15 +336,31 @@
                       <span class="info-label">
                         <i class="fas fa-phone me-2"></i>Số điện thoại:
                       </span>
-                      <span class="info-value copy-enabled"
-                        @click="copyToClipboard(landlordInfo.paymentSettings.momoInfo.phoneNumber)">
+                      <span
+                        class="info-value copy-enabled"
+                        @click="
+                          copyToClipboard(
+                            landlordInfo.paymentSettings.momoInfo.phoneNumber
+                          )
+                        "
+                      >
                         {{ landlordInfo.paymentSettings.momoInfo.phoneNumber }}
                         <i class="fas fa-copy ms-2"></i>
                       </span>
                     </div>
-                    <div class="qr-container" v-if="landlordInfo.paymentSettings.momoInfo.qrCode">
-                      <img :src="landlordInfo.paymentSettings.momoInfo.qrCode" alt="Momo QR" class="qr-code" />
-                      <button class="btn btn-outline-primary btn-sm mt-2" @click="downloadQR('momo')">
+                    <div
+                      class="qr-container"
+                      v-if="landlordInfo.paymentSettings.momoInfo.qrCode"
+                    >
+                      <img
+                        :src="landlordInfo.paymentSettings.momoInfo.qrCode"
+                        alt="Momo QR"
+                        class="qr-code"
+                      />
+                      <button
+                        class="btn btn-outline-primary btn-sm mt-2"
+                        @click="downloadQR('momo')"
+                      >
                         <i class="fas fa-download me-2"></i>Tải QR
                       </button>
                     </div>
@@ -273,11 +369,17 @@
               </div>
 
               <!-- Payment Instructions -->
-              <div class="alert alert-info mt-3" v-if="selectedPaymentMethod && currentBill">
+              <div
+                class="alert alert-info mt-3"
+                v-if="selectedPaymentMethod && currentBill"
+              >
                 <i class="fas fa-info-circle me-2"></i>
                 <strong>Nội dung chuyển khoản:</strong>
                 <div class="mt-2 payment-content">
-                  <span class="copy-enabled" @click="copyToClipboard(transferContent)">
+                  <span
+                    class="copy-enabled"
+                    @click="copyToClipboard(transferContent)"
+                  >
                     {{ transferContent }}
                     <i class="fas fa-copy ms-2"></i>
                   </span>
@@ -293,6 +395,7 @@
 
 <script>
 import crudApi from '@/apis/crudApi';
+import '@/styles/tenant/tenant-payment.css';
 
 export default {
   name: 'TenantPayments',
@@ -323,7 +426,9 @@ export default {
 
     transferContent() {
       if (!this.currentBill) return '';
-      return `TIEN_PHONG_${this.currentBill.roomNumber}_${this.formatMonthForTransfer(this.currentBill.month)}`;
+      return `TIEN_PHONG_${
+        this.currentBill.roomNumber
+      }_${this.formatMonthForTransfer(this.currentBill.month)}`;
     },
   },
 
@@ -334,8 +439,8 @@ export default {
   watch: {
     selectedMonth: {
       handler: 'updateBillDisplay',
-      immediate: true
-    }
+      immediate: true,
+    },
   },
 
   methods: {
@@ -347,15 +452,18 @@ export default {
           return;
         }
 
-        const response = await crudApi.read("api::bill.bill", {
-          customerEmail: currentUser.email
+        const response = await crudApi.read('api::bill.bill', {
+          customerEmail: currentUser.email,
         });
         this.bills = response.data;
 
         if (this.bills.length > 0) {
-          const landlordResponse = await crudApi.read("api::landlord-info.landlord-info", {
-            userId: { id: this.bills[0].landlordId }
-          });
+          const landlordResponse = await crudApi.read(
+            'api::landlord-info.landlord-info',
+            {
+              userId: { id: this.bills[0].landlordId },
+            }
+          );
           this.landlordInfo = landlordResponse.data[0];
         }
 
@@ -369,14 +477,16 @@ export default {
     },
 
     updateBillDisplay() {
-      this.currentBill = this.bills.find(bill => bill.month === this.selectedMonth);
+      this.currentBill = this.bills.find(
+        (bill) => bill.month === this.selectedMonth
+      );
       this.selectedPaymentMethod = '';
     },
 
     formatCurrency(value) {
       return new Intl.NumberFormat('vi-VN', {
         style: 'currency',
-        currency: 'VND'
+        currency: 'VND',
       }).format(value);
     },
 
@@ -413,9 +523,10 @@ export default {
 
     downloadQR(type) {
       try {
-        const qrUrl = type === 'bank'
-          ? this.landlordInfo.paymentSettings.bankInfo.qrCode
-          : this.landlordInfo.paymentSettings.momoInfo.qrCode;
+        const qrUrl =
+          type === 'bank'
+            ? this.landlordInfo.paymentSettings.bankInfo.qrCode
+            : this.landlordInfo.paymentSettings.momoInfo.qrCode;
 
         const link = document.createElement('a');
         link.href = qrUrl;
@@ -438,205 +549,6 @@ export default {
     //     this.$message.error('Có lỗi khi tải hóa đơn. Vui lòng thử lại.');
     //   }
     // }
-  }
+  },
 };
 </script>
-
-<style scoped>
-.tenant-payment {
-  min-height: 100vh;
-  margin-top: 5em !important;
-  padding: 20px;
-  background-color: #f8f9fa;
-  border-radius: 8px;
-  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-}
-
-.loading-container {
-  text-align: center;
-  padding: 2rem;
-}
-
-.card {
-  border: none;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-  border-radius: 8px;
-  transition: all 0.3s ease;
-}
-
-.card:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
-}
-
-.card-header {
-  border-radius: 8px 8px 0 0;
-  padding: 1rem 1.25rem;
-}
-
-.payment-method-card {
-  background: #fff;
-  border-radius: 8px;
-  padding: 1.5rem;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-  transition: all 0.3s ease;
-}
-
-.payment-method-card:hover {
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
-}
-
-.payment-header {
-  display: flex;
-  align-items: center;
-  margin-bottom: 1rem;
-  padding-bottom: 0.5rem;
-  border-bottom: 1px solid #e9ecef;
-}
-
-.payment-content {
-  padding: 0.5rem 0;
-}
-
-.info-row {
-  display: flex;
-  flex-direction: column;
-  margin-bottom: 0.75rem;
-}
-
-.info-label {
-  color: #6c757d;
-  font-size: 0.9rem;
-  margin-bottom: 0.25rem;
-}
-
-.info-value {
-  font-weight: 500;
-}
-
-.copy-enabled {
-  cursor: pointer;
-  transition: all 0.2s ease;
-  display: inline-flex;
-  align-items: center;
-  padding: 0.25rem 0.5rem;
-  border-radius: 4px;
-  background-color: #f8f9fa;
-}
-
-.copy-enabled:hover {
-  background-color: #e9ecef;
-  color: #0d6efd;
-}
-
-.qr-container {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  margin-top: 1rem;
-}
-
-.qr-code {
-  max-width: 200px;
-  border-radius: 8px;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-  margin-bottom: 0.5rem;
-}
-
-.table {
-  border-radius: 8px;
-  overflow: hidden;
-}
-
-.table th,
-.table td {
-  padding: 1rem;
-  vertical-align: middle;
-}
-
-.table th {
-  background-color: #f8f9fa;
-  border-bottom: 2px solid #dee2e6;
-  font-weight: 600;
-}
-
-.table tbody tr:hover {
-  background-color: #f8f9fa;
-}
-
-.service-row,
-.fee-row {
-  background-color: #fff;
-}
-
-.breadcrumb {
-  background: transparent;
-  padding: 0;
-  margin-bottom: 1rem;
-}
-
-.breadcrumb-item a {
-  color: #6c757d;
-  text-decoration: none;
-  transition: color 0.3s ease;
-}
-
-.breadcrumb-item a:hover {
-  color: #0d6efd;
-}
-
-.badge {
-  padding: 0.5rem 0.75rem;
-  font-size: 0.875rem;
-  font-weight: 500;
-}
-
-.form-select {
-  padding: 0.5rem;
-  border-radius: 6px;
-  border: 1px solid #ced4da;
-  transition: all 0.2s ease;
-}
-
-.form-select:focus {
-  border-color: #80bdff;
-  box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.25);
-}
-
-.alert {
-  border-radius: 8px;
-  margin-bottom: 1rem;
-}
-
-@media (max-width: 768px) {
-  .tenant-payment {
-    padding: 10px;
-    margin-top: 3em !important;
-  }
-
-  .card {
-    margin-bottom: 15px;
-  }
-
-  .payment-method-card {
-    padding: 1rem;
-  }
-
-  .table-responsive {
-    margin: 0 -15px;
-  }
-
-  .info-row {
-    flex-direction: column;
-  }
-
-  .info-label {
-    margin-bottom: 0.25rem;
-  }
-
-  .badge {
-    padding: 0.35rem 0.5rem;
-    font-size: 0.8rem;
-  }
-}
-</style>

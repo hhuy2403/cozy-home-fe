@@ -12,7 +12,11 @@
     </h1>
 
     <!-- Error Alert -->
-    <div v-if="error" class="alert alert-danger alert-dismissible fade show" role="alert">
+    <div
+      v-if="error"
+      class="alert alert-danger alert-dismissible fade show"
+      role="alert"
+    >
       {{ error }}
       <button type="button" class="btn-close" @click="error = null"></button>
     </div>
@@ -42,7 +46,7 @@
         </div>
       </div>
       <div class="col-12 col-md-6 col-lg-3">
-        <div class="summary-card ">
+        <div class="summary-card">
           <div class="card-body">
             <h5 class="card-title">Chưa Thanh Toán</h5>
             <h3 class="card-value">{{ formatCurrency(totalUnpaidAmount) }}</h3>
@@ -67,7 +71,9 @@
 
     <!-- Quản Lý Công Nợ -->
     <div class="debt-management mb-5">
-      <div class="section-header d-flex justify-content-between align-items-center mb-4">
+      <div
+        class="section-header d-flex justify-content-between align-items-center mb-4"
+      >
         <h2><i class="fas fa-hand-holding-usd"></i> Quản Lý Công Nợ</h2>
         <button @click="showCreateDebtForm = true" class="btn btn-primary">
           <i class="fas fa-plus me-1"></i> Thêm Công Nợ Mới
@@ -79,7 +85,12 @@
         <div class="row g-3">
           <div class="col-12 col-md-4">
             <div class="search-box">
-              <input v-model="searchQuery" type="text" class="form-control" placeholder="Tìm kiếm theo email...">
+              <input
+                v-model="searchQuery"
+                type="text"
+                class="form-control"
+                placeholder="Tìm kiếm theo email..."
+              />
             </div>
           </div>
           <div class="col-12 col-md-4">
@@ -115,23 +126,47 @@
             <tr v-if="filteredAndSortedDebts.length == 0">
               <td colspan="6" class="text-center">Không có công nợ nào</td>
             </tr>
-            <tr v-else v-for="(debt, index) in filteredAndSortedDebts" :key="index">
+            <tr
+              v-else
+              v-for="(debt, index) in filteredAndSortedDebts"
+              :key="index"
+            >
               <td>{{ index + 1 }}</td>
               <td>{{ debt.email }}</td>
               <td>{{ formatCurrency(debt.amount) }}</td>
               <td>{{ formatDate(debt.date) }}</td>
               <td>
-                <span :class="['status-badge', debt.status == 'Đã Thanh Toán' ? 'paid' : 'unpaid']">
-                  <i :class="['fas', debt.status == 'Đã Thanh Toán' ? 'fa-check-circle' : 'fa-clock']"></i>
+                <span
+                  :class="[
+                    'status-badge',
+                    debt.status == 'Đã Thanh Toán' ? 'paid' : 'unpaid',
+                  ]"
+                >
+                  <i
+                    :class="[
+                      'fas',
+                      debt.status == 'Đã Thanh Toán'
+                        ? 'fa-check-circle'
+                        : 'fa-clock',
+                    ]"
+                  ></i>
                   {{ debt.status }}
                 </span>
               </td>
               <td>
                 <div class="action-buttons">
-                  <button @click="editDebt(index)" class="btn btn-icon" title="Chỉnh sửa">
+                  <button
+                    @click="editDebt(index)"
+                    class="btn btn-icon"
+                    title="Chỉnh sửa"
+                  >
                     <i class="fas fa-edit"></i>
                   </button>
-                  <button @click="deleteDebt(index)" class="btn btn-icon danger" title="Xóa">
+                  <button
+                    @click="deleteDebt(debt.id)"
+                    class="btn btn-icon danger"
+                    title="Xóa"
+                  >
                     <i class="fas fa-trash"></i>
                   </button>
                 </div>
@@ -144,7 +179,9 @@
 
     <!-- Quản Lý Hóa Đơn -->
     <div class="bill-management">
-      <div class="section-header d-flex justify-content-between align-items-center mb-4">
+      <div
+        class="section-header d-flex justify-content-between align-items-center mb-4"
+      >
         <h2><i class="fas fa-file-invoice-dollar"></i> Quản Lý Hóa Đơn</h2>
         <button @click="showCreateBillForm = true" class="btn btn-primary">
           <i class="fas fa-plus me-1"></i> Tạo Hóa Đơn Mới
@@ -156,7 +193,12 @@
         <div class="row g-3">
           <div class="col-12 col-md-4">
             <div class="search-box">
-              <input v-model="billSearchQuery" type="text" class="form-control" placeholder="Tìm kiếm theo email...">
+              <input
+                v-model="billSearchQuery"
+                type="text"
+                class="form-control"
+                placeholder="Tìm kiếm theo email..."
+              />
             </div>
           </div>
           <div class="col-12 col-md-4">
@@ -198,18 +240,38 @@
               <td>{{ formatCurrency(bill.amount) }}</td>
               <td>{{ formatDate(bill.dueDate) }}</td>
               <td>
-                <span :class="['status-badge', bill.status == 'Đã Thanh Toán' ? 'paid' : 'unpaid']">
-                  <i :class="['fas', bill.status == 'Đã Thanh Toán' ? 'fa-check-circle' : 'fa-clock']"></i>
+                <span
+                  :class="[
+                    'status-badge',
+                    bill.status == 'Đã Thanh Toán' ? 'paid' : 'unpaid',
+                  ]"
+                >
+                  <i
+                    :class="[
+                      'fas',
+                      bill.status == 'Đã Thanh Toán'
+                        ? 'fa-check-circle'
+                        : 'fa-clock',
+                    ]"
+                  ></i>
                   {{ bill.status }}
                 </span>
               </td>
               <td>
                 <div class="action-buttons">
-                  <button v-if="bill.status !== 'Đã Thanh Toán'" @click="markAsPaid(bill.id)" class="btn btn-icon "
-                    title="Thanh toán">
+                  <button
+                    v-if="bill.status !== 'Đã Thanh Toán'"
+                    @click="markAsPaid(bill.id)"
+                    class="btn btn-icon"
+                    title="Thanh toán"
+                  >
                     <i class="fas fa-check"></i>
                   </button>
-                  <button @click="deleteBill(bill.id)" class="btn btn-icon danger" title="Xóa">
+                  <button
+                    @click="deleteBill(bill.id)"
+                    class="btn btn-icon danger"
+                    title="Xóa"
+                  >
                     <i class="fas fa-trash"></i>
                   </button>
                 </div>
@@ -227,24 +289,47 @@
               <h5 class="modal-title">
                 <i class="fas fa-file-invoice"></i> Tạo Hóa Đơn Mới
               </h5>
-              <button type="button" class="btn-close" @click="showCreateBillForm = false"></button>
+              <button
+                type="button"
+                class="btn-close"
+                @click="showCreateBillForm = false"
+              ></button>
             </div>
             <div class="modal-body">
               <form @submit.prevent="createBill">
                 <div class="mb-3">
                   <label class="form-label">Email</label>
-                  <input v-model="newBill.email" type="email" class="form-control" required>
+                  <input
+                    v-model="newBill.email"
+                    type="email"
+                    class="form-control"
+                    required
+                  />
                 </div>
                 <div class="mb-3">
                   <label class="form-label">Số Tiền (VND)</label>
-                  <input v-model.number="newBill.amount" type="number" class="form-control" required>
+                  <input
+                    v-model.number="newBill.amount"
+                    type="number"
+                    class="form-control"
+                    required
+                  />
                 </div>
                 <div class="mb-3">
                   <label class="form-label">Hạn Thanh Toán</label>
-                  <input v-model="newBill.dueDate" type="date" class="form-control" required>
+                  <input
+                    v-model="newBill.dueDate"
+                    type="date"
+                    class="form-control"
+                    required
+                  />
                 </div>
                 <div class="modal-footer">
-                  <button type="button" class="btn btn-secondary" @click="showCreateBillForm = false">
+                  <button
+                    type="button"
+                    class="btn btn-secondary"
+                    @click="showCreateBillForm = false"
+                  >
                     <i class="fas fa-times me-1"></i> Hủy
                   </button>
                   <button type="submit" class="btn btn-primary">
@@ -267,24 +352,47 @@
               <h5 class="modal-title">
                 <i class="fas fa-plus-circle"></i> Thêm Công Nợ Mới
               </h5>
-              <button type="button" class="btn-close" @click="showCreateDebtForm = false"></button>
+              <button
+                type="button"
+                class="btn-close"
+                @click="showCreateDebtForm = false"
+              ></button>
             </div>
             <div class="modal-body">
               <form @submit.prevent="createDebt">
                 <div class="mb-3">
                   <label class="form-label">Email</label>
-                  <input v-model="newDebt.email" type="email" class="form-control" required>
+                  <input
+                    v-model="newDebt.email"
+                    type="email"
+                    class="form-control"
+                    required
+                  />
                 </div>
                 <div class="mb-3">
                   <label class="form-label">Số Tiền (VND)</label>
-                  <input v-model.number="newDebt.amount" type="number" class="form-control" required>
+                  <input
+                    v-model.number="newDebt.amount"
+                    type="number"
+                    class="form-control"
+                    required
+                  />
                 </div>
                 <div class="mb-3">
                   <label class="form-label">Ngày Nợ</label>
-                  <input v-model="newDebt.date" type="date" class="form-control" required>
+                  <input
+                    v-model="newDebt.date"
+                    type="date"
+                    class="form-control"
+                    required
+                  />
                 </div>
                 <div class="modal-footer">
-                  <button type="button" class="btn btn-secondary" @click="showCreateDebtForm = false">
+                  <button
+                    type="button"
+                    class="btn btn-secondary"
+                    @click="showCreateDebtForm = false"
+                  >
                     <i class="fas fa-times me-1"></i> Hủy
                   </button>
                   <button type="submit" class="btn btn-primary">
@@ -305,24 +413,47 @@
               <h5 class="modal-title">
                 <i class="fas fa-edit"></i> Sửa Công Nợ
               </h5>
-              <button type="button" class="btn-close" @click="showEditDebtForm = false"></button>
+              <button
+                type="button"
+                class="btn-close"
+                @click="showEditDebtForm = false"
+              ></button>
             </div>
             <div class="modal-body">
               <form @submit.prevent="updateDebt">
                 <div class="mb-3">
                   <label class="form-label">Email</label>
-                  <input v-model="editingDebt.email" type="email" class="form-control" readonly>
+                  <input
+                    v-model="editingDebt.email"
+                    type="email"
+                    class="form-control"
+                    readonly
+                  />
                 </div>
                 <div class="mb-3">
                   <label class="form-label">Số Tiền (VND)</label>
-                  <input v-model.number="editingDebt.amount" type="number" class="form-control" required>
+                  <input
+                    v-model.number="editingDebt.amount"
+                    type="number"
+                    class="form-control"
+                    required
+                  />
                 </div>
                 <div class="mb-3">
                   <label class="form-label">Ngày Nợ</label>
-                  <input v-model="editingDebt.date" type="date" class="form-control" required>
+                  <input
+                    v-model="editingDebt.date"
+                    type="date"
+                    class="form-control"
+                    required
+                  />
                 </div>
                 <div class="modal-footer">
-                  <button type="button" class="btn btn-secondary" @click="showEditDebtForm = false">
+                  <button
+                    type="button"
+                    class="btn btn-secondary"
+                    @click="showEditDebtForm = false"
+                  >
                     <i class="fas fa-times me-1"></i> Hủy
                   </button>
                   <button type="submit" class="btn btn-primary">
@@ -343,24 +474,47 @@
               <h5 class="modal-title">
                 <i class="fas fa-file-invoice"></i> Tạo Hóa Đơn Mới
               </h5>
-              <button type="button" class="btn-close" @click="showCreateBillForm = false"></button>
+              <button
+                type="button"
+                class="btn-close"
+                @click="showCreateBillForm = false"
+              ></button>
             </div>
             <div class="modal-body">
               <form @submit.prevent="createBill">
                 <div class="mb-3">
                   <label class="form-label">Email</label>
-                  <input v-model="newBill.email" type="email" class="form-control" required>
+                  <input
+                    v-model="newBill.email"
+                    type="email"
+                    class="form-control"
+                    required
+                  />
                 </div>
                 <div class="mb-3">
                   <label class="form-label">Số Tiền (VND)</label>
-                  <input v-model.number="newBill.amount" type="number" class="form-control" required>
+                  <input
+                    v-model.number="newBill.amount"
+                    type="number"
+                    class="form-control"
+                    required
+                  />
                 </div>
                 <div class="mb-3">
                   <label class="form-label">Hạn Thanh Toán</label>
-                  <input v-model="newBill.dueDate" type="date" class="form-control" required>
+                  <input
+                    v-model="newBill.dueDate"
+                    type="date"
+                    class="form-control"
+                    required
+                  />
                 </div>
                 <div class="modal-footer">
-                  <button type="button" class="btn btn-secondary" @click="showCreateBillForm = false">
+                  <button
+                    type="button"
+                    class="btn btn-secondary"
+                    @click="showCreateBillForm = false"
+                  >
                     <i class="fas fa-times me-1"></i> Hủy
                   </button>
                   <button type="submit" class="btn btn-primary">
@@ -374,7 +528,10 @@
       </div>
 
       <!-- Modal Backdrop -->
-      <div v-if="showCreateDebtForm || showEditDebtForm || showCreateBillForm" class="modal-backdrop fade show"></div>
+      <div
+        v-if="showCreateDebtForm || showEditDebtForm || showCreateBillForm"
+        class="modal-backdrop fade show"
+      ></div>
     </div>
   </div>
 </template>
@@ -382,7 +539,8 @@
 <script>
 import { ref } from 'vue';
 import Swal from 'sweetalert2';
-import axios from 'axios';
+// import axios from 'axios';
+import crudApi from '@/apis/crudApi.js';
 
 export default {
   name: 'AdminFinancialManagement',
@@ -407,7 +565,7 @@ export default {
       email: '',
       amount: 0,
       date: '',
-      status: 'Chưa Thanh Toán'
+      status: 'Chưa Thanh Toán',
     });
 
     const editingDebt = ref({
@@ -415,14 +573,14 @@ export default {
       email: '',
       amount: 0,
       date: '',
-      status: ''
+      status: '',
     });
 
     const newBill = ref({
       email: '',
       amount: 0,
       dueDate: '',
-      status: 'Chưa Thanh Toán'
+      status: 'Chưa Thanh Toán',
     });
 
     return {
@@ -451,7 +609,7 @@ export default {
     async fetchDebts() {
       try {
         this.loading = true;
-        const response = await axios.get('https://6725a513c39fedae05b5670b.mockapi.io/api/v1/debts');
+        const response = await crudApi.read('api::debt.debt');
         this.debts = response.data;
       } catch (err) {
         this.showError('Không thể tải dữ liệu công nợ');
@@ -470,13 +628,13 @@ export default {
         confirmButtonText: 'Xóa',
         cancelButtonText: 'Hủy',
         confirmButtonColor: '#dc3545',
-        cancelButtonColor: '#6c757d'
+        cancelButtonColor: '#6c757d',
       });
 
       if (result.isConfirmed) {
         try {
           this.loading = true;
-          await axios.delete(`https://6725a513c39fedae05b5670b.mockapi.io/api/v1/billss/${id}`);
+          await crudApi.delete('api::bill-admin.bill-admin', { id: id });
           await this.fetchBills();
           this.showSuccessMessage('Xóa hóa đơn thành công');
         } catch (err) {
@@ -491,7 +649,7 @@ export default {
     async fetchBills() {
       try {
         this.loading = true;
-        const response = await axios.get('https://6725a513c39fedae05b5670b.mockapi.io/api/v1/billss');
+        const response = await crudApi.read('api::bill-admin.bill-admin');
         this.bills = response.data;
       } catch (err) {
         this.showError('Không thể tải dữ liệu hóa đơn');
@@ -508,7 +666,7 @@ export default {
         this.loading = true;
         // Làm tròn số tiền thành số nguyên
         this.newDebt.amount = Math.round(this.newDebt.amount);
-        await axios.post('https://6725a513c39fedae05b5670b.mockapi.io/api/v1/debts', this.newDebt);
+        await crudApi.create('api::debt.debt', this.newDebt);
         await this.fetchDebts();
         this.showCreateDebtForm = false;
         this.newDebt = this.getEmptyDebt();
@@ -529,13 +687,14 @@ export default {
         // Làm tròn số tiền thành số nguyên
         this.editingDebt.amount = Math.round(this.editingDebt.amount);
 
-        await axios.put(
-          `https://6725a513c39fedae05b5670b.mockapi.io/api/v1/debts/${this.editingDebt.id}`,
+        await crudApi.update(
+          'api::debt.debt',
+          { id: this.editingDebt },
           {
             email: this.editingDebt.email,
             amount: this.editingDebt.amount,
             date: this.editingDebt.date,
-            status: this.editingDebt.status
+            status: this.editingDebt.status,
           }
         );
 
@@ -559,13 +718,14 @@ export default {
         confirmButtonText: 'Xóa',
         cancelButtonText: 'Hủy',
         confirmButtonColor: '#dc3545',
-        cancelButtonColor: '#6c757d'
+        cancelButtonColor: '#6c757d',
       });
 
       if (result.isConfirmed) {
         try {
           this.loading = true;
-          await axios.delete(`https://6725a513c39fedae05b5670b.mockapi.io/api/v1/debts/${id}`);
+          // Update the delete request format
+          await crudApi.delete('api::debt.debt', { id });
           await this.fetchDebts();
           this.showSuccessMessage('Xóa công nợ thành công');
         } catch (err) {
@@ -587,7 +747,7 @@ export default {
         this.newBill.amount = Math.round(this.newBill.amount);
 
         // Kiểm tra công nợ tồn tại
-        const debt = this.debts.find(d => d.email == this.newBill.email);
+        const debt = this.debts.find((d) => d.email == this.newBill.email);
         if (!debt) {
           this.showError('Không tìm thấy công nợ cho email này');
           return;
@@ -604,10 +764,9 @@ export default {
           amount: this.newBill.amount,
           dueDate: this.newBill.dueDate,
           status: 'Chưa Thanh Toán',
-          createdAt: new Date().toISOString()
+          createdAt: new Date().toISOString(),
         };
-
-        await axios.post('https://6725a513c39fedae05b5670b.mockapi.io/api/v1/billss', billData);
+        await crudApi.create('api::bill-admin.bill-admin', billData);
         await this.fetchBills();
         this.showCreateBillForm = false;
         this.newBill = this.getEmptyBill();
@@ -629,15 +788,15 @@ export default {
         confirmButtonText: 'Xác nhận',
         cancelButtonText: 'Hủy',
         confirmButtonColor: '#198754',
-        cancelButtonColor: '#6c757d'
+        cancelButtonColor: '#6c757d',
       });
 
       if (result.isConfirmed) {
         try {
           this.loading = true;
-          const bill = this.unpaidBills.find(b => b.id == id);
+          const bill = this.unpaidBills.find((b) => b.id == id);
           bill.status = 'Đã Thanh Toán';
-          await axios.put(`https://6725a513c39fedae05b5670b.mockapi.io/api/v1/billss/${id}`, bill);
+          await crudApi.update('api::bill-admin.bill-admin', { id: id }, bill);
           await this.updateDebtAmount(bill.email, bill.amount);
           await this.fetchBills();
           this.showSuccessMessage('Đã cập nhật trạng thái thanh toán');
@@ -652,13 +811,13 @@ export default {
 
     async updateDebtAmount(email, amount) {
       try {
-        const debt = this.debts.find(d => d.email == email);
+        const debt = this.debts.find((d) => d.email == email);
         if (debt) {
           debt.amount -= amount;
           if (debt.amount <= 0) {
             debt.status = 'Đã Thanh Toán';
           }
-          await axios.put(`https://6725a513c39fedae05b5670b.mockapi.io/api/v1/debts/${debt.id}`, debt);
+          crudApi.update('api::debt.debt', { id: debt.id }, debt);
         }
       } catch (err) {
         console.error('Error updating debt amount:', err);
@@ -670,7 +829,7 @@ export default {
       try {
         this.loading = true;
         const debt = this.filteredAndSortedDebts[index];
-        const response = await axios.get(`https://6725a513c39fedae05b5670b.mockapi.io/api/v1/debts/${debt.id}`);
+        const response = await crudApi.read('api::debt.debt', { id: debt.id });
         this.editingDebt = { ...response.data };
         this.showEditDebtForm = true;
       } catch (err) {
@@ -777,7 +936,7 @@ export default {
         toast: true,
         timer: 3000,
         timerProgressBar: true,
-        showConfirmButton: false
+        showConfirmButton: false,
       });
     },
 
@@ -790,7 +949,7 @@ export default {
         toast: true,
         timer: 5000,
         timerProgressBar: true,
-        showConfirmButton: false
+        showConfirmButton: false,
       });
     },
 
@@ -799,7 +958,7 @@ export default {
         email: '',
         amount: 0,
         date: '',
-        status: 'Chưa Thanh Toán'
+        status: 'Chưa Thanh Toán',
       };
     },
 
@@ -808,16 +967,16 @@ export default {
         email: '',
         amount: 0,
         dueDate: '',
-        status: 'Chưa Thanh Toán'
+        status: 'Chưa Thanh Toán',
       };
     },
 
     formatCurrency(value) {
       return new Intl.NumberFormat('vi-VN', {
         style: 'currency',
-        currency: 'VND'
+        currency: 'VND',
       }).format(value);
-    }
+    },
   },
 
   computed: {
@@ -827,13 +986,13 @@ export default {
 
     totalPaidAmount() {
       return this.debts
-        .filter(debt => debt.status == 'Đã Thanh Toán')
+        .filter((debt) => debt.status == 'Đã Thanh Toán')
         .reduce((total, debt) => total + debt.amount, 0);
     },
 
     totalUnpaidAmount() {
       return this.debts
-        .filter(debt => debt.status == 'Chưa Thanh Toán')
+        .filter((debt) => debt.status == 'Chưa Thanh Toán')
         .reduce((total, debt) => total + debt.amount, 0);
     },
 
@@ -845,12 +1004,12 @@ export default {
       let result = [...this.debts];
 
       if (this.statusFilter) {
-        result = result.filter(debt => debt.status == this.statusFilter);
+        result = result.filter((debt) => debt.status == this.statusFilter);
       }
 
       if (this.searchQuery) {
         const query = this.searchQuery.toLowerCase();
-        result = result.filter(debt =>
+        result = result.filter((debt) =>
           debt.email.toLowerCase().includes(query)
         );
       }
@@ -875,13 +1034,13 @@ export default {
 
       // Áp dụng filter trạng thái
       if (this.billStatusFilter) {
-        result = result.filter(bill => bill.status == this.billStatusFilter);
+        result = result.filter((bill) => bill.status == this.billStatusFilter);
       }
 
       // Áp dụng tìm kiếm
       if (this.billSearchQuery) {
         const query = this.billSearchQuery.toLowerCase();
-        result = result.filter(bill =>
+        result = result.filter((bill) =>
           bill.email.toLowerCase().includes(query)
         );
       }
@@ -904,11 +1063,8 @@ export default {
   },
 
   async mounted() {
-    await Promise.all([
-      this.fetchDebts(),
-      this.fetchBills()
-    ]);
-  }
+    await Promise.all([this.fetchDebts(), this.fetchBills()]);
+  },
 };
 </script>
 
@@ -1179,7 +1335,7 @@ export default {
     justify-content: center;
   }
 
-  .filter-search-bar .row>* {
+  .filter-search-bar .row > * {
     margin-bottom: 0.75rem;
   }
 }

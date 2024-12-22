@@ -1,5 +1,5 @@
 <template>
-  <div class="notifications container mt-4">
+  <div class="notifications container">
     <div class="notifications-header mb-4">
       <h2><i class="fas fa-bell me-2"></i>Thông báo</h2>
       <p class="text-muted">Quản lý và theo dõi các thông báo của bạn</p>
@@ -20,16 +20,16 @@
               <span class="input-group-text">
                 <i class="fas fa-search"></i>
               </span>
-              <input 
-                type="text" 
-                class="form-control" 
+              <input
+                type="text"
+                class="form-control"
                 v-model="searchQuery"
-                placeholder="Tìm kiếm thông báo..." 
+                placeholder="Tìm kiếm thông báo..."
               />
             </div>
           </div>
           <div class="col-md-6 text-end">
-            <button 
+            <button
               class="btn btn-outline-secondary"
               @click="markAllAsRead"
               v-if="unreadCount > 0"
@@ -50,26 +50,30 @@
             </h5>
             <form @submit.prevent="sendNotification">
               <div class="mb-3">
-                <label for="notificationTitle" class="form-label">Tiêu đề</label>
-                <input 
-                  type="text" 
-                  id="notificationTitle" 
+                <label for="notificationTitle" class="form-label"
+                  >Tiêu đề</label
+                >
+                <input
+                  type="text"
+                  id="notificationTitle"
                   v-model="newNotification.title"
                   class="form-control"
                   :class="{ 'is-invalid': errors.title }"
-                  required 
+                  required
                 />
                 <div class="invalid-feedback">{{ errors.title }}</div>
               </div>
 
               <div class="mb-3">
-                <label for="notificationMessage" class="form-label">Nội dung thông báo</label>
-                <textarea 
-                  id="notificationMessage" 
+                <label for="notificationMessage" class="form-label"
+                  >Nội dung thông báo</label
+                >
+                <textarea
+                  id="notificationMessage"
                   v-model="newNotification.message"
                   class="form-control"
                   :class="{ 'is-invalid': errors.message }"
-                  rows="4" 
+                  rows="4"
                   required
                 ></textarea>
                 <div class="invalid-feedback">{{ errors.message }}</div>
@@ -77,15 +81,19 @@
 
               <div class="mb-3">
                 <label for="targetTenant" class="form-label">Gửi tới</label>
-                <select 
-                  id="targetTenant" 
+                <select
+                  id="targetTenant"
                   v-model="newNotification.targetEmail"
                   class="form-select"
                   :class="{ 'is-invalid': errors.targetEmail }"
                   required
                 >
                   <option value="" disabled>Chọn người thuê</option>
-                  <option v-for="tenant in tenants" :key="tenant.email" :value="tenant.email">
+                  <option
+                    v-for="tenant in tenants"
+                    :key="tenant.email"
+                    :value="tenant.email"
+                  >
                     {{ tenant.fullName }} - {{ tenant.email }}
                   </option>
                 </select>
@@ -93,15 +101,15 @@
               </div>
 
               <div class="text-end">
-                <button 
-                  type="button" 
+                <button
+                  type="button"
                   class="btn btn-outline-secondary me-2"
                   @click="resetForm"
                 >
                   <i class="fas fa-undo me-1"></i>Làm mới
                 </button>
-                <button 
-                  type="submit" 
+                <button
+                  type="submit"
                   class="btn btn-primary"
                   :disabled="isSubmitting"
                 >
@@ -117,16 +125,18 @@
       <!-- Notifications List -->
       <div class="notifications-list">
         <div v-if="filteredNotifications.length > 0">
-          <div 
-            v-for="(notification, index) in filteredNotifications" 
+          <div
+            v-for="(notification, index) in filteredNotifications"
             :key="index"
             class="notification-item card mb-3"
-            :class="{ 'unread': !notification.read }"
+            :class="{ unread: !notification.read }"
             @click="markAsRead(index)"
           >
             <div class="card-body">
               <div class="notification-status">
-                <span v-if="!notification.read" class="badge bg-primary">Mới</span>
+                <span v-if="!notification.read" class="badge bg-primary"
+                  >Mới</span
+                >
               </div>
               <h5 class="card-title">{{ notification.title }}</h5>
               <p class="card-text">{{ notification.message }}</p>
@@ -154,6 +164,7 @@
 
 <script>
 import Swal from 'sweetalert2';
+import '@/styles/tenant/tenant-notification.css';
 
 export default {
   data() {
@@ -167,12 +178,12 @@ export default {
         message: '',
         targetEmail: '',
         date: '',
-        read: false
+        read: false,
       },
       errors: {
         title: '',
         message: '',
-        targetEmail: ''
+        targetEmail: '',
       },
       tenants: [],
       notifications: [],
@@ -182,17 +193,18 @@ export default {
   computed: {
     filteredNotifications() {
       if (!this.searchQuery) return this.notifications;
-      
+
       const query = this.searchQuery.toLowerCase();
-      return this.notifications.filter(notification => 
-        notification.title.toLowerCase().includes(query) ||
-        notification.message.toLowerCase().includes(query)
+      return this.notifications.filter(
+        (notification) =>
+          notification.title.toLowerCase().includes(query) ||
+          notification.message.toLowerCase().includes(query)
       );
     },
 
     unreadCount() {
-      return this.notifications.filter(n => !n.read).length;
-    }
+      return this.notifications.filter((n) => !n.read).length;
+    },
   },
 
   async created() {
@@ -213,7 +225,7 @@ export default {
         this.isLandlord = currentUser.role == 'landlord';
         await Promise.all([
           this.loadNotifications(),
-          this.isLandlord && this.loadTenants()
+          this.isLandlord && this.loadTenants(),
         ]);
       }
     },
@@ -221,10 +233,10 @@ export default {
     async loadTenants() {
       try {
         const homes = JSON.parse(localStorage.getItem('homes')) || [];
-        this.tenants = homes.flatMap(home =>
+        this.tenants = homes.flatMap((home) =>
           home.rooms
-            .filter(room => room.customer && room.customer.email)
-            .map(room => ({
+            .filter((room) => room.customer && room.customer.email)
+            .map((room) => ({
               fullName: room.customer.fullName,
               email: room.customer.email,
             }))
@@ -238,12 +250,15 @@ export default {
     async loadNotifications() {
       try {
         const currentUser = JSON.parse(localStorage.getItem('currentUser'));
-        const allNotifications = JSON.parse(localStorage.getItem('notifications')) || [];
-        
+        const allNotifications =
+          JSON.parse(localStorage.getItem('notifications')) || [];
+
         this.notifications = allNotifications
-          .filter(notification =>
-            (this.isLandlord && notification.sender == currentUser.email) ||
-            (!this.isLandlord && notification.targetEmail == currentUser.email)
+          .filter(
+            (notification) =>
+              (this.isLandlord && notification.sender == currentUser.email) ||
+              (!this.isLandlord &&
+                notification.targetEmail == currentUser.email)
           )
           .sort((a, b) => new Date(b.date) - new Date(a.date));
       } catch (error) {
@@ -257,7 +272,7 @@ export default {
       this.errors = {
         title: '',
         message: '',
-        targetEmail: ''
+        targetEmail: '',
       };
 
       if (!this.newNotification.title.trim()) {
@@ -284,32 +299,37 @@ export default {
       try {
         this.isSubmitting = true;
         const currentUser = JSON.parse(localStorage.getItem('currentUser'));
-        
+
         const notification = {
           ...this.newNotification,
           date: new Date().toISOString(),
           sender: currentUser.email,
-          read: false
+          read: false,
         };
 
-        const allNotifications = JSON.parse(localStorage.getItem('notifications')) || [];
+        const allNotifications =
+          JSON.parse(localStorage.getItem('notifications')) || [];
         allNotifications.push(notification);
         localStorage.setItem('notifications', JSON.stringify(allNotifications));
-        
+
         this.notifications.unshift(notification);
-        
+
         await Swal.fire({
           icon: 'success',
           title: 'Thành công',
           text: 'Thông báo đã được gửi thành công!',
           timer: 1500,
-          showConfirmButton: false
+          showConfirmButton: false,
         });
 
         this.resetForm();
       } catch (error) {
         console.error('Error sending notification:', error);
-        Swal.fire('Lỗi', 'Không thể gửi thông báo. Vui lòng thử lại sau.', 'error');
+        Swal.fire(
+          'Lỗi',
+          'Không thể gửi thông báo. Vui lòng thử lại sau.',
+          'error'
+        );
       } finally {
         this.isSubmitting = false;
       }
@@ -321,12 +341,12 @@ export default {
         message: '',
         targetEmail: '',
         date: '',
-        read: false
+        read: false,
       };
       this.errors = {
         title: '',
         message: '',
-        targetEmail: ''
+        targetEmail: '',
       };
     },
 
@@ -334,21 +354,26 @@ export default {
       if (this.notifications[index].read) return;
 
       try {
-        const allNotifications = JSON.parse(localStorage.getItem('notifications')) || [];
+        const allNotifications =
+          JSON.parse(localStorage.getItem('notifications')) || [];
         const notification = this.notifications[index];
-        
+
         // Update in local array
         this.notifications[index].read = true;
 
         // Update in localStorage
-        const notificationIndex = allNotifications.findIndex(n => 
-          n.date == notification.date && 
-          n.targetEmail == notification.targetEmail
+        const notificationIndex = allNotifications.findIndex(
+          (n) =>
+            n.date == notification.date &&
+            n.targetEmail == notification.targetEmail
         );
 
         if (notificationIndex !== -1) {
           allNotifications[notificationIndex].read = true;
-          localStorage.setItem('notifications', JSON.stringify(allNotifications));
+          localStorage.setItem(
+            'notifications',
+            JSON.stringify(allNotifications)
+          );
         }
       } catch (error) {
         console.error('Error marking notification as read:', error);
@@ -357,14 +382,15 @@ export default {
 
     async markAllAsRead() {
       try {
-        const allNotifications = JSON.parse(localStorage.getItem('notifications')) || [];
+        const allNotifications =
+          JSON.parse(localStorage.getItem('notifications')) || [];
         const currentUser = JSON.parse(localStorage.getItem('currentUser'));
 
         // Update all unread notifications
-        this.notifications.forEach(n => n.read = true);
+        this.notifications.forEach((n) => (n.read = true));
 
         // Update in localStorage
-        allNotifications.forEach(n => {
+        allNotifications.forEach((n) => {
           if (n.targetEmail == currentUser.email) {
             n.read = true;
           }
@@ -377,11 +403,15 @@ export default {
           title: 'Thành công',
           text: 'Tất cả thông báo đã được đánh dấu là đã đọc!',
           timer: 1500,
-          showConfirmButton: false
+          showConfirmButton: false,
         });
       } catch (error) {
         console.error('Error marking all as read:', error);
-        Swal.fire('Lỗi', 'Không thể cập nhật trạng thái thông báo. Vui lòng thử lại sau.', 'error');
+        Swal.fire(
+          'Lỗi',
+          'Không thể cập nhật trạng thái thông báo. Vui lòng thử lại sau.',
+          'error'
+        );
       }
     },
 
@@ -391,105 +421,9 @@ export default {
         month: 'long',
         day: 'numeric',
         hour: '2-digit',
-        minute: '2-digit'
+        minute: '2-digit',
       });
-    }
-  }
+    },
+  },
 };
 </script>
-
-<style scoped>
-.notifications {
-  margin-top: 5em !important;
-  min-height: 100vh;
-  padding: 20px;
-  background-color: #f8f9fa;
-}
-
-.notifications-header h2 {
-  color: #2a3f54;
-  font-size: 30px;
-  font-weight: 500;
-  margin-bottom: 10px;
-}
-
-.card {
-  border: none;
-  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-  border-radius: 10px;
-  transition: transform 0.2s;
-}
-
-.notification-item {
-  cursor: pointer;
-}
-
-.notification-item:hover {
-  transform: translateY(-2px);
-}
-
-.notification-item.unread {
-  border-left: 4px solid #007bff;
-}
-
-.notification-status {
-  position: absolute;
-  top: 15px;
-  right: 15px;
-}
-
-.notification-meta {
-  display: flex;
-  gap: 20px;
-  color: #6c757d;
-  font-size: 0.9em;
-  margin-top: 15px;
-}
-
-.form-control, .form-select {
-  border-radius: 8px;
-  border: 1px solid #ced4da;
-  padding: 10px 15px;
-}
-
-.form-control:focus, .form-select:focus {
-  border-color: #80bdff;
-  box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.25);
-}
-
-.btn {
-  padding: 8px 16px;
-  border-radius: 8px;
-  font-weight: 500;
-}
-
-.btn-primary {
-  background-color: #007bff;
-  border-color: #007bff;
-}
-
-.btn-primary:hover {
-  background-color: #0056b3;
-  border-color: #0056b3;
-}
-
-.alert {
-  border-radius: 8px;
-  padding: 15px;
-}
-
-@media (max-width: 768px) {
-  .notifications {
-    padding: 10px;
-  }
-  
-  .notification-meta {
-    flex-direction: column;
-    gap: 10px;
-  }
-  
-  .filter-section .row > div {
-    margin-bottom: 10px;
-  }
-}
-</style>

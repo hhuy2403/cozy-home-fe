@@ -164,10 +164,9 @@
 </template>
 
 <script>
-import axios from 'axios'
+// import axios from 'axios'
 import Swal from 'sweetalert2'
-
-const API_URL = 'https://6725a513c39fedae05b5670b.mockapi.io/api/v1'
+import crudApi from '@/apis/crudApi';
 
 export default {
   name: 'AdminSettings',
@@ -322,7 +321,7 @@ export default {
     async fetchConfig() {
       try {
         this.showLoading('Đang tải cấu hình...');
-        const response = await axios.get(`${API_URL}/settings/1`);
+        const response = await crudApi.read("api::setting.setting", { id: 1 });
         if (response.data) {
           this.config = { ...this.config, ...response.data };
         }
@@ -356,7 +355,7 @@ export default {
 
     async createDefaultConfig() {
       try {
-        const response = await axios.post(`${API_URL}/settings`, {
+        const response = await crudApi.create("api::setting.setting", {
           ...this.defaultConfig,
           createdAt: new Date().toISOString(),
           updatedAt: new Date().toISOString()
@@ -426,7 +425,7 @@ export default {
           ...this.config,
           updatedAt: new Date().toISOString()
         };
-        const response = await axios.put(`${API_URL}/settings/${this.config.id}`, updatedConfig);
+        const response = await crudApi.update("api::setting.setting", { id: this.config.id }, updatedConfig);
         this.config = { ...this.config, ...response.data };
 
         // Hiển thị thông báo thành công
@@ -477,7 +476,7 @@ export default {
           updatedAt: new Date().toISOString()
         };
 
-        const response = await axios.put(`${API_URL}/settings/${this.config.id}`, resetConfig);
+        const response = await crudApi.update("api::setting.setting", { id: this.config.id }, resetConfig);
         this.config = { ...this.config, ...response.data };
 
         // Hiển thị thông báo thành công

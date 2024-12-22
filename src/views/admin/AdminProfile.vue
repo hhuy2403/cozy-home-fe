@@ -136,6 +136,7 @@
 <script>
 import { ref, onMounted } from 'vue';
 import Swal from 'sweetalert2';
+import crudApi from '@/apis/crudApi';
 
 export default {
   name: 'AdminProfile',
@@ -226,15 +227,11 @@ export default {
     const handleSubmit = async () => {
       try {
         loading.value = true;
-        const response = await fetch(`https://6725a513c39fedae05b5670b.mockapi.io/api/v1/users/${currentUser.id}`, {
-          method: 'PUT',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({
-            name: profileData.value.fullName,
-            phone: profileData.value.phone,
-            birthDate: profileData.value.birthDate,
-            avatar: profileData.value.avatar,
-          })
+        const response = await crudApi.update('plugin::users-permissions.user', {id: currentUser.id}, {
+          name: profileData.value.fullName,
+          phone: profileData.value.phone,
+          birthDate: profileData.value.birthDate,
+          avatar: profileData.value.avatar,
         });
 
         if (!response.ok) throw new Error('Không thể cập nhật thông tin');
@@ -293,12 +290,8 @@ export default {
           profileData.value.avatar = data.secure_url;
 
           // Cập nhật thông tin user
-          await fetch(`https://6725a513c39fedae05b5670b.mockapi.io/api/v1/users/${currentUser.id}`, {
-            method: 'PUT',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({
-              avatar: data.secure_url
-            })
+          await crudApi.update('plugin::users-permissions.user', {id: currentUser.id}, {
+            avatar: data.secure_url
           });
 
           Swal.fire({
@@ -365,7 +358,7 @@ export default {
         loading.value = true;
 
         // Get current user from API
-        const response = await fetch(`https://6725a513c39fedae05b5670b.mockapi.io/api/v1/users/${currentUser.id}`);
+        const response = await crudApi.read('plugin::users-permissions.user', {id : currentUser.id});
         if (!response.ok) throw new Error('Không thể xác thực người dùng');
 
         const user = await response.json();
@@ -385,14 +378,9 @@ export default {
 
         // Update password
         const newPasswordEncoded = btoa(passwordForm.value.newPassword);
-        const updateResponse = await fetch(
-          `https://6725a513c39fedae05b5670b.mockapi.io/api/v1/users/${currentUser.id}`,
-          {
-            method: 'PUT',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ password: newPasswordEncoded }),
-          }
-        );
+        const updateResponse = await crudApi.update('plugin::users-permissions.user', {id: currentUser.id}, {
+          password: newPasswordEncoded
+        });
 
         if (!updateResponse.ok) throw new Error('Không thể cập nhật mật khẩu');
 
@@ -421,7 +409,7 @@ export default {
     onMounted(async () => {
       try {
         loading.value = true;
-        const response = await fetch(`https://6725a513c39fedae05b5670b.mockapi.io/api/v1/users/${currentUser.id}`);
+        const response = await crudApi.read('plugin::users-permissions.user', {id: currentUser.id});
         const data = await response.json();
         profileData.value = {
           fullName: data.name,

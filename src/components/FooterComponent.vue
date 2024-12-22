@@ -12,8 +12,9 @@
                 <span>CozyHome</span>
               </div>
               <p class="footer-desc">
-                CozyHome là giải pháp quản lý nhà trọ thông minh, giúp chủ trọ và người thuê
-                kết nối hiệu quả, quản lý dễ dàng và thanh toán tiện lợi.
+                CozyHome là giải pháp quản lý nhà trọ thông minh, giúp chủ trọ
+                và người thuê kết nối hiệu quả, quản lý dễ dàng và thanh toán
+                tiện lợi.
               </p>
               <div class="social-links">
                 <a href="#" class="social-link facebook">
@@ -43,22 +44,22 @@
                   </router-link>
                 </li>
                 <li>
-                  <router-link to="/about">
+                  <router-link to="">
                     <i class="fas fa-chevron-right"></i>&nbsp; Giới Thiệu
                   </router-link>
                 </li>
                 <li>
-                  <router-link to="/services">
+                  <router-link to="">
                     <i class="fas fa-chevron-right"></i>&nbsp; Dịch Vụ
                   </router-link>
                 </li>
                 <li>
-                  <router-link to="/pricing">
+                  <router-link to="">
                     <i class="fas fa-chevron-right"></i>&nbsp; Bảng Giá
                   </router-link>
                 </li>
                 <li>
-                  <router-link to="/contact">
+                  <router-link to="">
                     <i class="fas fa-chevron-right"></i>&nbsp; Liên Hệ
                   </router-link>
                 </li>
@@ -107,7 +108,7 @@
               <div class="contact-info">
                 <div class="contact-item">
                   <i class="fas fa-map-marker-alt"></i>
-                  <p>&nbsp;123 Đường ABC, Quận XYZ, TP.HCM</p>
+                  <p>&nbsp;136 Xuan Thuy, Cau Giay, Ha Noi</p>
                 </div>
                 <div class="contact-item">
                   <i class="fas fa-phone-alt"></i>
@@ -118,7 +119,9 @@
                 <div class="contact-item">
                   <i class="fas fa-envelope"></i>
                   <p>
-                    <a href="mailto:contact@cozyhome.vn">&nbsp;contact@cozyhome.vn</a>
+                    <a href="mailto:contact@cozyhome.vn"
+                      >&nbsp;contact@cozyhome.vn</a
+                    >
                   </p>
                 </div>
                 <div class="contact-item">
@@ -144,13 +147,13 @@
           <div class="col-md-6">
             <ul class="footer-bottom-links">
               <li>
-                <router-link to="/privacy">Chính sách bảo mật</router-link>
+                <router-link to="">Chính sách bảo mật</router-link>
               </li>
               <li>
-                <router-link to="/terms">Điều khoản sử dụng</router-link>
+                <router-link to="">Điều khoản sử dụng</router-link>
               </li>
               <li>
-                <router-link to="/faq">FAQ</router-link>
+                <router-link to="">FAQ</router-link>
               </li>
             </ul>
           </div>
@@ -159,7 +162,11 @@
     </div>
 
     <!-- Scroll to Top Button -->
-    <button class="scroll-top" :class="{ 'show': showScrollTop }" @click="scrollToTop">
+    <button
+      class="scroll-top"
+      :class="{ show: showScrollTop }"
+      @click="scrollToTop"
+    >
       <i class="fas fa-arrow-up"></i>
     </button>
   </footer>
@@ -171,8 +178,8 @@ export default {
   data() {
     return {
       currentYear: new Date().getFullYear(),
-      showScrollTop: false
-    }
+      showScrollTop: false,
+    };
   },
   mounted() {
     window.addEventListener('scroll', this.handleScroll);
@@ -187,11 +194,11 @@ export default {
     scrollToTop() {
       window.scrollTo({
         top: 0,
-        behavior: 'smooth'
+        behavior: 'smooth',
       });
-    }
-  }
-}
+    },
+  },
+};
 </script>
 
 <style scoped>

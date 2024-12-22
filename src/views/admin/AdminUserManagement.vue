@@ -12,7 +12,11 @@
     </h1>
 
     <!-- Error Alert -->
-    <div v-if="error" class="alert alert-danger alert-dismissible fade show" role="alert">
+    <div
+      v-if="error"
+      class="alert alert-danger alert-dismissible fade show"
+      role="alert"
+    >
       {{ error }}
       <button type="button" class="btn-close" @click="error = null"></button>
     </div>
@@ -67,7 +71,9 @@
 
     <!-- User Management Section -->
     <div class="user-management mb-5">
-      <div class="section-header d-flex justify-content-between align-items-center mb-4">
+      <div
+        class="section-header d-flex justify-content-between align-items-center mb-4"
+      >
         <h2><i class="fas fa-user-cog"></i> Danh Sách Người Dùng</h2>
         <button @click="showAddUserModal = true" class="btn btn-primary">
           <i class="fas fa-plus me-1"></i> Thêm Người Dùng
@@ -79,12 +85,21 @@
         <div class="row g-3">
           <div class="col-12 col-md-4">
             <div class="search-box">
-              <input v-model="searchTerm" @input="searchUsers" type="text" class="form-control" 
-                placeholder="Tìm kiếm theo email hoặc tên...">
+              <input
+                v-model="searchTerm"
+                @input="searchUsers"
+                type="text"
+                class="form-control"
+                placeholder="Tìm kiếm theo email hoặc tên..."
+              />
             </div>
           </div>
           <div class="col-12 col-md-4">
-            <select v-model="roleFilter" @change="paginateUsers" class="form-select">
+            <select
+              v-model="roleFilter"
+              @change="paginateUsers"
+              class="form-select"
+            >
               <option value="">Tất cả vai trò</option>
               <option value="admin">Quản trị viên</option>
               <option value="landlord">Chủ nhà</option>
@@ -92,7 +107,11 @@
             </select>
           </div>
           <div class="col-12 col-md-4">
-            <select v-model="statusFilter" @change="paginateUsers" class="form-select">
+            <select
+              v-model="statusFilter"
+              @change="paginateUsers"
+              class="form-select"
+            >
               <option value="">Tất cả trạng thái</option>
               <option value="active">Hoạt động</option>
               <option value="inactive">Vô hiệu hóa</option>
@@ -106,14 +125,26 @@
         <table class="table table-hover">
           <thead>
             <tr>
-              <th @click="sortBy('id')">ID 
-                <i v-if="sortKey == 'id'" :class="['fas', sortAsc ? 'fa-sort-up' : 'fa-sort-down']"></i>
+              <th @click="sortBy('id')">
+                ID
+                <i
+                  v-if="sortKey == 'id'"
+                  :class="['fas', sortAsc ? 'fa-sort-up' : 'fa-sort-down']"
+                ></i>
               </th>
-              <th @click="sortBy('name')">Tên
-                <i v-if="sortKey == 'name'" :class="['fas', sortAsc ? 'fa-sort-up' : 'fa-sort-down']"></i>
+              <th @click="sortBy('name')">
+                Tên
+                <i
+                  v-if="sortKey == 'name'"
+                  :class="['fas', sortAsc ? 'fa-sort-up' : 'fa-sort-down']"
+                ></i>
               </th>
-              <th @click="sortBy('email')">Email
-                <i v-if="sortKey == 'email'" :class="['fas', sortAsc ? 'fa-sort-up' : 'fa-sort-down']"></i>
+              <th @click="sortBy('email')">
+                Email
+                <i
+                  v-if="sortKey == 'email'"
+                  :class="['fas', sortAsc ? 'fa-sort-up' : 'fa-sort-down']"
+                ></i>
               </th>
               <th>Vai trò</th>
               <th>Trạng thái</th>
@@ -133,34 +164,69 @@
             </tr>
             <tr v-else v-for="user in paginatedUsers" :key="user.id">
               <td>{{ user.id }}</td>
-              <td>{{ user.name || 'N/A' }}</td>
+              <td>{{ user.username || 'N/A' }}</td>
               <td>{{ user.email }}</td>
               <td>
-                <select v-model="user.role" @change="changeUserRole(user.id, user.role)" 
-                  class="form-select form-select-sm">
+                <select
+                  v-model="user.customRole"
+                  @change="changeUserRole(user.id, user.customRole)"
+                  class="form-select form-select-sm"
+                >
                   <option value="admin">Quản trị viên</option>
                   <option value="landlord">Chủ nhà</option>
                   <option value="tenant">Người thuê</option>
                 </select>
               </td>
               <td>
-                <span :class="['status-badge', user.status == 'active' ? 'paid' : 'unpaid']">
-                  <i :class="['fas', user.status == 'active' ? 'fa-check-circle' : 'fa-ban']"></i>
-                  {{ user.status == 'active' ? 'Hoạt động' : 'Vô hiệu hóa' }}
+                <span
+                  :class="[
+                    'status-badge',
+                    user.customStatus === 'active' ? 'paid' : 'unpaid',
+                  ]"
+                >
+                  <i
+                    :class="[
+                      'fas',
+                      user.customStatus === 'active'
+                        ? 'fa-check-circle'
+                        : 'fa-ban',
+                    ]"
+                  ></i>
+                  {{
+                    user.customStatus === 'active' ? 'Hoạt động' : 'Vô hiệu hóa'
+                  }}
                 </span>
               </td>
               <td>
                 <div class="action-buttons">
-                  <button @click="editUser(user)" class="btn btn-icon" title="Chỉnh sửa">
+                  <button
+                    @click="editUser(user)"
+                    class="btn btn-icon"
+                    title="Chỉnh sửa"
+                  >
                     <i class="fas fa-edit"></i>
                   </button>
-                  <button @click="confirmDeleteUser(user.id)" class="btn btn-icon danger" title="Xóa">
+                  <button
+                    @click="confirmDeleteUser(user.id)"
+                    class="btn btn-icon danger"
+                    title="Xóa"
+                  >
                     <i class="fas fa-trash"></i>
                   </button>
-                  <button @click="toggleUserStatus(user.id)" class="btn btn-icon" 
-                    :class="user.status == 'active' ? 'warning' : 'success'" 
-                    :title="user.status == 'active' ? 'Vô hiệu hóa' : 'Kích hoạt'">
-                    <i :class="['fas', user.status == 'active' ? 'fa-ban' : 'fa-check']"></i>
+                  <button
+                    @click="toggleUserStatus(user.id)"
+                    class="btn btn-icon"
+                    :class="user.status == 'active' ? 'warning' : 'success'"
+                    :title="
+                      user.status == 'active' ? 'Vô hiệu hóa' : 'Kích hoạt'
+                    "
+                  >
+                    <i
+                      :class="[
+                        'fas',
+                        user.status == 'active' ? 'fa-ban' : 'fa-check',
+                      ]"
+                    ></i>
                   </button>
                 </div>
               </td>
@@ -177,11 +243,20 @@
               <i class="fas fa-chevron-left"></i> Trang trước
             </button>
           </li>
-          <li v-for="page in totalPages" :key="page" 
-            class="page-item" :class="{ active: currentPage == page }">
-            <button class="page-link" @click="currentPage = page">{{ page }}</button>
+          <li
+            v-for="page in totalPages"
+            :key="page"
+            class="page-item"
+            :class="{ active: currentPage == page }"
+          >
+            <button class="page-link" @click="currentPage = page">
+              {{ page }}
+            </button>
           </li>
-          <li class="page-item" :class="{ disabled: currentPage == totalPages }">
+          <li
+            class="page-item"
+            :class="{ disabled: currentPage == totalPages }"
+          >
             <button class="page-link" @click="nextPage">
               Trang sau <i class="fas fa-chevron-right"></i>
             </button>
@@ -191,52 +266,107 @@
     </div>
 
     <!-- Add/Edit User Modal -->
-    <div v-if="showAddUserModal || showEditUserModal" class="modal fade show d-block">
+    <div
+      v-if="showAddUserModal || showEditUserModal"
+      class="modal fade show d-block"
+    >
       <div class="modal-dialog modal-dialog-centered">
         <div class="modal-content">
           <div class="modal-header">
             <h5 class="modal-title">
-              <i :class="['fas', showEditUserModal ? 'fa-edit' : 'fa-plus-circle', 'me-2']"></i>
+              <i
+                :class="[
+                  'fas',
+                  showEditUserModal ? 'fa-edit' : 'fa-plus-circle',
+                  'me-2',
+                ]"
+              ></i>
               {{ showEditUserModal ? 'Sửa người dùng' : 'Thêm người dùng mới' }}
             </h5>
-            <button type="button" class="btn-close" @click="closeModal"></button>
+            <button
+              type="button"
+              class="btn-close"
+              @click="closeModal"
+            ></button>
           </div>
           <div class="modal-body">
-            <form @submit.prevent="handleSubmit" class="needs-validation" novalidate>
+            <form
+              @submit.prevent="handleSubmit"
+              class="needs-validation"
+              novalidate
+            >
               <div class="mb-3">
-                <label for="name" class="form-label required">Tên</label>
-                <input type="text" id="name" v-model="modalUser.name" class="form-control"
-                  :class="{ 'is-invalid': nameError }" required />
+                <label for="username" class="form-label required"
+                  >Tên người dùng</label
+                >
+                <input
+                  type="text"
+                  id="username"
+                  v-model="modalUser.username"
+                  class="form-control"
+                  :class="{ 'is-invalid': nameError }"
+                  required
+                  minlength="3"
+                />
                 <div class="invalid-feedback">{{ nameError }}</div>
               </div>
               <div class="mb-3">
                 <label for="email" class="form-label required">Email</label>
-                <input type="email" id="email" v-model="modalUser.email" @blur="validateEmail" 
-                  @input="checkEmailLength" maxlength="256" class="form-control" 
-                  :class="{ 'is-invalid': emailError }" required />
+                <input
+                  type="email"
+                  id="email"
+                  v-model="modalUser.email"
+                  @blur="validateEmail"
+                  @input="checkEmailLength"
+                  maxlength="256"
+                  class="form-control"
+                  :class="{ 'is-invalid': emailError }"
+                  required
+                />
                 <div class="invalid-feedback">{{ emailError }}</div>
               </div>
 
               <div class="mb-3" v-if="!showEditUserModal">
-                <label for="password" class="form-label required">Mật khẩu</label>
+                <label for="password" class="form-label required"
+                  >Mật khẩu</label
+                >
                 <div class="input-group">
-                  <input :type="showPassword ? 'text' : 'password'" id="password" 
-                    v-model="modalUser.password" class="form-control" 
-                    :class="{ 'is-invalid': passwordError }" @blur="validatePassword" required />
-                  <button type="button" class="btn btn-outline-secondary" 
-                    @click="showPassword = !showPassword">
-                    <i :class="['fas', showPassword ? 'fa-eye-slash' : 'fa-eye']"></i>
+                  <input
+                    :type="showPassword ? 'text' : 'password'"
+                    id="password"
+                    v-model="modalUser.password"
+                    class="form-control"
+                    :class="{ 'is-invalid': passwordError }"
+                    @blur="validatePassword"
+                    required
+                  />
+                  <button
+                    type="button"
+                    class="btn btn-outline-secondary"
+                    @click="showPassword = !showPassword"
+                  >
+                    <i
+                      :class="['fas', showPassword ? 'fa-eye-slash' : 'fa-eye']"
+                    ></i>
                   </button>
                 </div>
-                <div class="invalid-feedback" v-if="passwordError">{{ passwordError }}</div>
+                <div class="invalid-feedback" v-if="passwordError">
+                  {{ passwordError }}
+                </div>
                 <small class="text-muted">
-                  Mật khẩu phải có ít nhất 8 ký tự, bao gồm chữ hoa, chữ thường, số và ký tự đặc biệt.
+                  Mật khẩu phải có ít nhất 8 ký tự, bao gồm chữ hoa, chữ thường,
+                  số và ký tự đặc biệt.
                 </small>
               </div>
 
               <div class="mb-3">
                 <label for="role" class="form-label required">Vai trò</label>
-                <select id="role" v-model="modalUser.role" class="form-select" required>
+                <select
+                  id="role"
+                  v-model="modalUser.role"
+                  class="form-select"
+                  required
+                >
                   <option value="admin">Quản trị viên</option>
                   <option value="landlord">Chủ nhà</option>
                   <option value="tenant">Người thuê</option>
@@ -244,13 +374,24 @@
               </div>
 
               <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" @click="closeModal">
+                <button
+                  type="button"
+                  class="btn btn-secondary"
+                  @click="closeModal"
+                >
                   <i class="fas fa-times me-2"></i>Hủy
                 </button>
-                <button type="submit" class="btn btn-primary" :disabled="isSubmitting">
+                <button
+                  type="submit"
+                  class="btn btn-primary"
+                  :disabled="isSubmitting"
+                >
                   <i class="fas fa-save me-2"></i>
                   {{ showEditUserModal ? 'Cập nhật' : 'Thêm' }}
-                  <span v-if="isSubmitting" class="spinner-border spinner-border-sm ms-2"></span>
+                  <span
+                    v-if="isSubmitting"
+                    class="spinner-border spinner-border-sm ms-2"
+                  ></span>
                 </button>
               </div>
             </form>
@@ -260,19 +401,21 @@
     </div>
 
     <!-- Modal backdrop -->
-    <div v-if="showAddUserModal || showEditUserModal" class="modal-backdrop fade show"></div>
+    <div
+      v-if="showAddUserModal || showEditUserModal"
+      class="modal-backdrop fade show"
+    ></div>
   </div>
 </template>
 
 <script>
-import Swal from "sweetalert2";
-import axios from "axios";
-
-const API_URL = "https://6725a513c39fedae05b5670b.mockapi.io/api/v1/users";
+import Swal from 'sweetalert2';
+// import axios from "axios";
+import crudApi from '@/apis/crudApi';
 
 export default {
-  name: "AdminUserManagement",
-  
+  name: 'AdminUserManagement',
+
   data() {
     return {
       users: [],
@@ -282,62 +425,73 @@ export default {
       isLoading: false,
       isSearching: false,
       isSubmitting: false,
-      
+
       // Pagination
       currentPage: 1,
       pageSize: 10,
-      
+
       // Filters
-      searchTerm: "",
-      roleFilter: "",
-      statusFilter: "",
-      sortKey: "",
+      searchTerm: '',
+      roleFilter: '',
+      statusFilter: '',
+      sortKey: '',
       sortAsc: true,
-      
+
       // Modals
       showAddUserModal: false,
       showEditUserModal: false,
       showPassword: false,
-      
+
       // Form validation
-      emailError: "",
-      passwordError: "",
-      nameError: "",
-      
+      emailError: '',
+      passwordError: '',
+      nameError: '',
+
       // Modal user data
       modalUser: {
-        id: null,
-        name: "",
-        email: "",
-        password: "",
-        role: "tenant",
-        status: "active",
+        username: '',
+        email: '',
+        password: '',
+        customRole: 'tenant',
+        customStatus: 'active',
+        confirmed: true,
+        blocked: false,
+        provider: 'local',
       },
-      
+
       debounceTimeout: null,
     };
   },
 
   computed: {
     adminCount() {
-      return this.users.filter(user => user.role == 'admin').length;
+      return (
+        this.users?.filter((user) => user?.customRole === 'admin')?.length || 0
+      );
     },
-    
+
     landlordCount() {
-      return this.users.filter(user => user.role == 'landlord').length;
+      return (
+        this.users?.filter((user) => user?.customRole === 'landlord')?.length ||
+        0
+      );
     },
-    
+
     tenantCount() {
-      return this.users.filter(user => user.role == 'tenant').length;
+      return (
+        this.users?.filter((user) => user?.customRole === 'tenant')?.length || 0
+      );
     },
-    
+
     paginatedUsers() {
+      if (!this.filteredUsers) return [];
       const start = (this.currentPage - 1) * this.pageSize;
       const end = start + parseInt(this.pageSize, 10);
       return this.filteredUsers.slice(start, end);
     },
-    
+
     totalPages() {
+      if (!this.filteredUsers) return 0;
       return Math.ceil(this.filteredUsers.length / this.pageSize);
     },
   },
@@ -347,33 +501,45 @@ export default {
       this.loading = true;
       this.error = null;
       try {
-        const response = await axios.get(API_URL);
-        this.users = response.data.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
+        const response = await crudApi.read('plugin::users-permissions.user');
+        // Đảm bảo dữ liệu trả về có đầy đủ các trường cần thiết
+        this.users = response.data.map((user) => ({
+          id: user.id,
+          username: user.username || '',
+          email: user.email || '',
+          customRole: user.customRole || 'landlord', // Giá trị mặc định nếu không có
+          customStatus: user.customStatus || 'active', // Giá trị mặc định nếu không có
+        }));
         this.paginateUsers();
       } catch (error) {
-        this.error = "Không thể tải danh sách người dùng. Vui lòng thử lại sau.";
-        console.error("Error fetching users:", error);
+        this.error =
+          'Không thể tải danh sách người dùng. Vui lòng thử lại sau.';
+        console.error('Error fetching users:', error);
       } finally {
         this.loading = false;
       }
     },
 
     validateName() {
-      this.modalUser.name = this.modalUser.name.trim();
-      if (!this.modalUser.name) {
-        this.nameError = "Tên không được để trống";
+      this.modalUser.username = this.modalUser.username.trim();
+      if (!this.modalUser.username) {
+        this.nameError = 'Tên không được để trống';
         return false;
       }
-      this.nameError = "";
+      if (this.modalUser.username.length < 3) {
+        this.nameError = 'Tên phải có ít nhất 3 ký tự';
+        return false;
+      }
+      this.nameError = '';
       return true;
     },
 
     checkEmailLength() {
       if (this.modalUser.email.length > 256) {
-        this.emailError = "Email không được vượt quá 256 ký tự";
+        this.emailError = 'Email không được vượt quá 256 ký tự';
         return false;
       }
-      this.emailError = "";
+      this.emailError = '';
       return true;
     },
 
@@ -383,17 +549,17 @@ export default {
       const sqlInjectionPattern = /['";]/;
 
       if (!this.modalUser.email) {
-        this.emailError = "Email không được để trống";
+        this.emailError = 'Email không được để trống';
         return false;
       }
 
       if (sqlInjectionPattern.test(this.modalUser.email)) {
-        this.emailError = "Email chứa ký tự không hợp lệ";
+        this.emailError = 'Email chứa ký tự không hợp lệ';
         return false;
       }
 
       if (!emailPattern.test(this.modalUser.email)) {
-        this.emailError = "Email không đúng định dạng";
+        this.emailError = 'Email không đúng định dạng';
         return false;
       }
 
@@ -402,19 +568,21 @@ export default {
 
     validatePassword() {
       if (!this.showEditUserModal) {
-        const passwordPattern = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
-        
+        const passwordPattern =
+          /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
+
         if (!this.modalUser.password) {
-          this.passwordError = "Mật khẩu không được để trống";
+          this.passwordError = 'Mật khẩu không được để trống';
           return false;
         }
-        
+
         if (!passwordPattern.test(this.modalUser.password)) {
-          this.passwordError = "Mật khẩu phải có ít nhất 8 ký tự, bao gồm chữ hoa, chữ thường, số và ký tự đặc biệt";
+          this.passwordError =
+            'Mật khẩu phải có ít nhất 8 ký tự, bao gồm chữ hoa, chữ thường, số và ký tự đặc biệt';
           return false;
         }
       }
-      this.passwordError = "";
+      this.passwordError = '';
       return true;
     },
 
@@ -441,20 +609,25 @@ export default {
       // Apply search filter
       if (this.searchTerm) {
         const searchTerm = this.searchTerm.toLowerCase();
-        filteredUsers = filteredUsers.filter(user =>
-          user.name?.toLowerCase().includes(searchTerm) ||
-          user.email.toLowerCase().includes(searchTerm)
+        filteredUsers = filteredUsers.filter(
+          (user) =>
+            user.name?.toLowerCase().includes(searchTerm) ||
+            user.email.toLowerCase().includes(searchTerm)
         );
       }
 
       // Apply role filter
       if (this.roleFilter) {
-        filteredUsers = filteredUsers.filter(user => user.role == this.roleFilter);
+        filteredUsers = filteredUsers.filter(
+          (user) => user.role == this.roleFilter
+        );
       }
 
       // Apply status filter
       if (this.statusFilter) {
-        filteredUsers = filteredUsers.filter(user => user.status == this.statusFilter);
+        filteredUsers = filteredUsers.filter(
+          (user) => user.status == this.statusFilter
+        );
       }
 
       // Apply sorting
@@ -463,8 +636,8 @@ export default {
           let valueA = a[this.sortKey];
           let valueB = b[this.sortKey];
 
-          if (valueA == null || valueA == undefined) valueA = "";
-          if (valueB == null || valueB == undefined) valueB = "";
+          if (valueA == null || valueA == undefined) valueA = '';
+          if (valueB == null || valueB == undefined) valueB = '';
 
           if (typeof valueA == 'string') valueA = valueA.toLowerCase();
           if (typeof valueB == 'string') valueB = valueB.toLowerCase();
@@ -506,31 +679,51 @@ export default {
 
     async createUser() {
       try {
-        const newUser = {
-          ...this.modalUser,
-          createdAt: new Date().toISOString()
-        };
+        const response = await crudApi.create(
+          'plugin::users-permissions.user',
+          {
+            username: this.modalUser.username,
+            email: this.modalUser.email,
+            password: this.modalUser.password,
+            customRole: this.modalUser.customRole,
+            customStatus: this.modalUser.customStatus,
+            confirmed: true,
+            blocked: false,
+            provider: 'local',
+          }
+        );
 
-        const response = await axios.post(API_URL, newUser);
+        // Create landlord info if role is landlord
+        if (this.modalUser.customRole === 'landlord') {
+          await crudApi.create('api::landlord-info.landlord-info', {
+            userId: response.data.id,
+            personalInfo: {
+              name: this.modalUser.username,
+              email: this.modalUser.email,
+              phone: '',
+              address: '',
+            },
+          });
+        }
+
         this.users.unshift(response.data);
         this.paginateUsers();
         this.closeModal();
 
         Swal.fire({
-          icon: "success",
-          title: "Thành công",
-          text: "Người dùng mới đã được thêm thành công!",
+          icon: 'success',
+          title: 'Thành công',
+          text: 'Người dùng mới đã được thêm thành công!',
         });
       } catch (error) {
-        console.error("Error creating user:", error);
+        console.error('Error creating user:', error);
         Swal.fire({
-          icon: "error",
-          title: "Lỗi",
-          text: "Không thể thêm người dùng. Vui lòng thử lại sau.",
+          icon: 'error',
+          title: 'Lỗi',
+          text: 'Không thể thêm người dùng. Vui lòng thử lại sau.',
         });
       }
     },
-
     async updateUser() {
       try {
         const updatedUser = {
@@ -539,8 +732,14 @@ export default {
           email: this.modalUser.email.trim(),
         };
 
-        const response = await axios.put(`${API_URL}/${this.modalUser.id}`, updatedUser);
-        const index = this.users.findIndex(user => user.id == this.modalUser.id);
+        const response = await crudApi.update(
+          'plugin::users-permissions.user',
+          { id: this.modalUser.id },
+          updatedUser
+        );
+        const index = this.users.findIndex(
+          (user) => user.id == this.modalUser.id
+        );
 
         if (index !== -1) {
           this.users.splice(index, 1, response.data);
@@ -548,17 +747,17 @@ export default {
           this.closeModal();
 
           Swal.fire({
-            icon: "success",
-            title: "Thành công",
-            text: "Thông tin người dùng đã được cập nhật!",
+            icon: 'success',
+            title: 'Thành công',
+            text: 'Thông tin người dùng đã được cập nhật!',
           });
         }
       } catch (error) {
-        console.error("Error updating user:", error);
+        console.error('Error updating user:', error);
         Swal.fire({
-          icon: "error",
-          title: "Lỗi",
-          text: "Không thể cập nhật thông tin người dùng. Vui lòng thử lại sau.",
+          icon: 'error',
+          title: 'Lỗi',
+          text: 'Không thể cập nhật thông tin người dùng. Vui lòng thử lại sau.',
         });
       }
     },
@@ -570,14 +769,14 @@ export default {
 
     async confirmDeleteUser(id) {
       const result = await Swal.fire({
-        title: "Xác nhận xóa",
-        text: "Bạn có chắc chắn muốn xóa người dùng này?",
-        icon: "warning",
+        title: 'Xác nhận xóa',
+        text: 'Bạn có chắc chắn muốn xóa người dùng này?',
+        icon: 'warning',
         showCancelButton: true,
-        confirmButtonColor: "#d33",
-        cancelButtonColor: "#3085d6",
-        confirmButtonText: "Xóa",
-        cancelButtonText: "Hủy",
+        confirmButtonColor: '#d33',
+        cancelButtonColor: '#3085d6',
+        confirmButtonText: 'Xóa',
+        cancelButtonText: 'Hủy',
       });
 
       if (result.isConfirmed) {
@@ -587,69 +786,79 @@ export default {
 
     async deleteUser(id) {
       try {
-        await axios.delete(`${API_URL}/${id}`);
-        this.users = this.users.filter(user => user.id !== id);
+        await crudApi.delete('plugin::users-permissions.user', { id });
+        this.users = this.users.filter((user) => user.id !== id);
         this.paginateUsers();
 
         Swal.fire({
-          icon: "success",
-          title: "Thành công",
-          text: "Người dùng đã được xóa thành công.",
+          icon: 'success',
+          title: 'Thành công',
+          text: 'Người dùng đã được xóa thành công.',
         });
       } catch (error) {
-        console.error("Error deleting user:", error);
+        console.error('Error deleting user:', error);
         Swal.fire({
-          icon: "error",
-          title: "Lỗi",
-          text: "Không thể xóa người dùng. Vui lòng thử lại sau.",
+          icon: 'error',
+          title: 'Lỗi',
+          text: 'Không thể xóa người dùng. Vui lòng thử lại sau.',
         });
       }
     },
 
-    async changeUserRole(id, role) {
+    async changeUserRole(id, customRole) {
       try {
-        await axios.put(`${API_URL}/${id}`, { role });
-        
+        await crudApi.update(
+          'plugin::users-permissions.user',
+          { id },
+          { customRole }
+        );
+
         Swal.fire({
-          icon: "success",
-          title: "Thành công",
-          text: "Vai trò người dùng đã được cập nhật!",
+          icon: 'success',
+          title: 'Thành công',
+          text: 'Vai trò người dùng đã được cập nhật!',
           timer: 1500,
           showConfirmButton: false,
         });
       } catch (error) {
-        console.error("Error changing user role:", error);
+        console.error('Error changing user role:', error);
         Swal.fire({
-          icon: "error",
-          title: "Lỗi",
-          text: "Không thể thay đổi vai trò người dùng. Vui lòng thử lại sau.",
+          icon: 'error',
+          title: 'Lỗi',
+          text: 'Không thể thay đổi vai trò người dùng. Vui lòng thử lại sau.',
         });
       }
     },
 
     async toggleUserStatus(id) {
       try {
-        const user = this.users.find(user => user.id == id);
+        const user = this.users.find((user) => user.id == id);
         if (user) {
-          const newStatus = user.status == "active" ? "inactive" : "active";
-          await axios.put(`${API_URL}/${id}`, { status: newStatus });
+          const newStatus = user.status == 'active' ? 'inactive' : 'active';
+          await crudApi.update(
+            'plugin::users-permissions.user',
+            { id },
+            { status: newStatus }
+          );
           user.status = newStatus;
           this.paginateUsers();
 
           Swal.fire({
-            icon: newStatus == "active" ? "success" : "warning",
-            title: newStatus == "active" ? "Đã kích hoạt" : "Đã vô hiệu hóa",
-            text: `Người dùng đã được ${newStatus == "active" ? "kích hoạt" : "vô hiệu hóa"}.`,
+            icon: newStatus == 'active' ? 'success' : 'warning',
+            title: newStatus == 'active' ? 'Đã kích hoạt' : 'Đã vô hiệu hóa',
+            text: `Người dùng đã được ${
+              newStatus == 'active' ? 'kích hoạt' : 'vô hiệu hóa'
+            }.`,
             timer: 1500,
             showConfirmButton: false,
           });
         }
       } catch (error) {
-        console.error("Error toggling user status:", error);
+        console.error('Error toggling user status:', error);
         Swal.fire({
-          icon: "error",
-          title: "Lỗi",
-          text: "Không thể thay đổi trạng thái người dùng. Vui lòng thử lại sau.",
+          icon: 'error',
+          title: 'Lỗi',
+          text: 'Không thể thay đổi trạng thái người dùng. Vui lòng thử lại sau.',
         });
       }
     },
@@ -667,10 +876,10 @@ export default {
     },
 
     resetFilters() {
-      this.searchTerm = "";
-      this.roleFilter = "";
-      this.statusFilter = "";
-      this.sortKey = "";
+      this.searchTerm = '';
+      this.roleFilter = '';
+      this.statusFilter = '';
+      this.sortKey = '';
       this.sortAsc = true;
       this.currentPage = 1;
       this.paginateUsers();
@@ -681,15 +890,18 @@ export default {
       this.showEditUserModal = false;
       this.modalUser = {
         id: null,
-        name: "",
-        email: "",
-        password: "",
-        role: "tenant",
-        status: "active",
+        username: '',
+        email: '',
+        password: '',
+        customRole: 'tenant',
+        customStatus: 'active',
+        confirmed: true,
+        blocked: false,
+        provider: 'local',
       };
-      this.emailError = "";
-      this.passwordError = "";
-      this.nameError = "";
+      this.emailError = '';
+      this.passwordError = '';
+      this.nameError = '';
       this.showPassword = false;
     },
   },
@@ -701,8 +913,8 @@ export default {
   watch: {
     pageSize() {
       this.paginateUsers();
-    }
-  }
+    },
+  },
 };
 </script>
 
@@ -915,7 +1127,7 @@ export default {
 }
 
 .required::after {
-  content: " *";
+  content: ' *';
   color: red;
 }
 

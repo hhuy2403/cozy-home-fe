@@ -1,7 +1,7 @@
 import axios from 'axios';
 
 const axiosClient = axios.create({
-  baseURL: "https://prepared-breeze-81c4a8dee5.strapiapp.com",
+  baseURL: process.env.VUE_APP_DOMAIN_BE,
   headers: {
     'Content-Type': 'application/json',
   },

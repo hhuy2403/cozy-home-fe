@@ -3,17 +3,27 @@
   <div class="forgot-password-page">
     <div class="forgot-password-box">
       <h1>Quên mật khẩu</h1>
-      <p>Vui lòng nhập địa chỉ email của bạn để nhận liên kết khôi phục mật khẩu.</p>
+      <p>
+        Vui lòng nhập địa chỉ email của bạn để nhận liên kết khôi phục mật khẩu.
+      </p>
 
       <!-- Form nhập email -->
       <form @submit.prevent="submitEmail">
         <div class="form-group">
           <label for="email">Email:</label>
-          <input type="email" v-model="email" id="email" placeholder="Nhập địa chỉ email của bạn" @blur="validateEmail"
-            class="form-control" />
+          <input
+            type="email"
+            v-model="email"
+            id="email"
+            placeholder="Nhập địa chỉ email của bạn"
+            @blur="validateEmail"
+            class="form-control"
+          />
         </div>
         <small v-if="emailError" class="error-message">{{ emailError }}</small>
-        <button type="submit" class="btn btn-primary">Gửi liên kết khôi phục</button>
+        <button type="submit" class="btn btn-primary">
+          Gửi liên kết khôi phục
+        </button>
       </form>
 
       <!-- Thông báo đã nhớ mật khẩu -->
@@ -26,7 +36,9 @@
       <p v-if="successMessage" class="text-success mt-3">
         <a :href="resetLink" target="_blank">{{ successMessage }}</a>
       </p>
-      <p v-else-if="errorMessage" class="text-danger mt-3">{{ errorMessage }}</p>
+      <p v-else-if="errorMessage" class="text-danger mt-3">
+        {{ errorMessage }}
+      </p>
     </div>
   </div>
   <FooterComponent />
@@ -34,8 +46,8 @@
 
 <script>
 import Swal from 'sweetalert2';
-import HeaderComponent from "@/components/HeaderComponent.vue";
-import FooterComponent from "@/components/FooterComponent.vue";
+import HeaderComponent from '@/components/HeaderComponent.vue';
+import FooterComponent from '@/components/FooterComponent.vue';
 
 export default {
   name: 'ForgotPassword',
@@ -51,7 +63,7 @@ export default {
   },
   methods: {
     generateResetToken() {
-      return Math.random().toString(36).substr(2); // Generate a random string as token
+      return Math.random().toString(36).substr(2);
     },
 
     validateEmail() {
@@ -69,63 +81,66 @@ export default {
 
     submitEmail() {
       if (this.validateEmail()) {
-        // Fetch user data from MockAPI to verify the email
-        fetch(`https://6725a513c39fedae05b5670b.mockapi.io/api/v1/users?email=${this.email}`)
-          .then(response => response.json())
-          .then(users => {
-            // Only proceed if a user with the provided email exists
+        fetch(
+          `https://6725a513c39fedae05b5670b.mockapi.io/api/v1/users?email=${this.email}`
+        )
+          .then((response) => response.json())
+          .then((users) => {
             if (users.length == 0) {
               Swal.fire({
                 icon: 'error',
                 title: 'Lỗi!',
                 text: 'Email không tồn tại trong hệ thống.',
-                confirmButtonColor: '#d33'
+                confirmButtonColor: '#d33',
               });
               this.successMessage = '';
               return;
             }
 
-            const user = users[0]; // Assuming the email is unique in the database
-
-            // Generate a reset token
+            const user = users[0];
             const resetToken = this.generateResetToken();
 
-            // Save the reset token to MockAPI
-            fetch(`https://6725a513c39fedae05b5670b.mockapi.io/api/v1/users/${user.id}`, {
-              method: 'PUT',
-              headers: {
-                'Content-Type': 'application/json',
-              },
-              body: JSON.stringify({ resetToken }),
-            })
+            fetch(
+              `https://6725a513c39fedae05b5670b.mockapi.io/api/v1/users/${user.id}`,
+              {
+                method: 'PUT',
+                headers: {
+                  'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ resetToken }),
+              }
+            )
               .then(() => {
-                // Display the clickable reset link
-                this.resetLink = `${window.location.origin}/reset-password?token=${resetToken}&email=${encodeURIComponent(this.email)}`;
+                this.resetLink = `${
+                  window.location.origin
+                }/reset-password?token=${resetToken}&email=${encodeURIComponent(
+                  this.email
+                )}`;
                 Swal.fire({
                   icon: 'success',
                   title: 'Thành công!',
                   html: `Nhấp vào <a href="${this.resetLink}" target="_blank">đây</a> để đặt lại mật khẩu của bạn.`,
-                  confirmButtonColor: '#28a745'
+                  confirmButtonColor: '#28a745',
                 });
                 this.errorMessage = '';
               })
-              .catch(error => {
+              .catch((error) => {
                 Swal.fire({
                   icon: 'error',
                   title: 'Lỗi!',
                   text: 'Không thể lưu mã đặt lại mật khẩu.',
-                  confirmButtonColor: '#d33'
+                  confirmButtonColor: '#d33',
                 });
                 console.error(error);
               });
           })
-          .catch(error => {
+          .catch((error) => {
             console.error('Lỗi khi tìm người dùng:', error);
             Swal.fire({
               icon: 'error',
               title: 'Lỗi!',
               text: 'Có lỗi xảy ra khi gửi email. Vui lòng thử lại sau.',
-              confirmButtonColor: '#d33'
+              confirmButtonColor: '#d33',
             });
           });
       }

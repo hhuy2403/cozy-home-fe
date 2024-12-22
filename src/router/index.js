@@ -17,6 +17,7 @@ import TenantPayments from '@/views/tenant/TenantPayments.vue';
 import TenantProfile from '@/views/tenant/TenantProfile.vue';
 import TenantMyRoom from '@/views/tenant/TenantMyRoom.vue';
 import TenantSetting from '@/views/tenant/TenantSetting.vue';
+import TenantNotification from '@/views/tenant/TenantNotification.vue';
 
 // Import cho Landlord
 import LandlordDashboard from '@/views/landlord/LandlordDashboard.vue';
@@ -50,8 +51,6 @@ import ReportCustomerContractExpired from "@/views/landlord/report/ReportCustome
 import ReportRoomPerson from "@/views/landlord/report/ReportRoomPerson.vue";
 import ReportInvoiceDetail from "@/views/landlord/report/ReportInvoiceDetail.vue";
 
-
-
 // Import Layouts
 import AdminTenantLayout from '@/layouts/AdminTenantLayout.vue';
 import LandlordLayout from '@/layouts/LandlordLayout.vue';
@@ -59,8 +58,6 @@ import LoginPage from "@/views/auth/LoginPage.vue";
 import RegisterPage from "@/views/auth/RegisterPage.vue";
 import ForgotPassword from "@/views/auth/ForgotPassword.vue";
 import ChangePassword from "@/views/settings/ChangePassword.vue";
-import NotificationPage from "@/views/NotificationPage.vue";
-import SupportPage from "@/views/SupportPage.vue";
 import ResetPassword from "@/views/auth/ResetPassword.vue";
 
 // Định nghĩa các routes
@@ -84,14 +81,6 @@ const routes = [
     {
         path: '/reset-password',
         component: ResetPassword,
-    },
-    {
-        path: '/notification',
-        component: NotificationPage,
-    },
-    {
-        path: '/support',
-        component: SupportPage,
     },
     {
         path: '/admin',
@@ -119,8 +108,7 @@ const routes = [
             { path: 'profile', component: TenantProfile },
             { path: 'my-room', component: TenantMyRoom },
             { path: 'settings', component: TenantSetting },
-            { path: 'notification', component: NotificationPage },
-            { path: 'support', component: SupportPage }
+            { path: 'notification', component: TenantNotification },
         ]
     },
     {
@@ -159,14 +147,6 @@ const routes = [
             { path: 'customer-contract-expired', component: ReportCustomerContractExpired },
             { path: 'room-person', component: ReportRoomPerson },
             { path: 'invoice-detail', component: ReportInvoiceDetail },
-            { path: 'notification', component: NotificationPage },
-            { path: 'support', component: SupportPage }
-            
-
-
-
-
-
         ]
     }
 ];
